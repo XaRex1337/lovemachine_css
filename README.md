@@ -1,12 +1,18 @@
 # lovemachine_css
 lovemachine for css (steam)
 
-code is pretty messy and some features can be outdated/not complete
+if you have any suggestions/ideas/fixes/etc you can PM me
+* vk/xarex_ez
+* [unknowncheats/xarex](https://www.unknowncheats.me/forum/members/1555190.html)
+* discord xarex#0220
+
+code is pretty messy and some features can be outdated/not complete but the most is working fine
 
 the people whose functions i used and who helped me are marked in the code "(c) ..."
 
-# showcase
-https://www.youtube.com/watch?v=7ej6-iTziOM
+# links
+* [showcase](https://www.youtube.com/watch?v=7ej6-iTziOM)
+* uc thread
 
 # some cool features
 * legit backtrack (needs a little rework (209 in backtrack.h "0.2f" i think) to get more than 10 ticks adequately) with bt chams/dots
