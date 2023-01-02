@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="inject">
+      <UniqueIdentifier>{7ff5f192-60b0-4418-8215-1ccd34d9a0dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="definitions">
+      <UniqueIdentifier>{abd05e1f-ac17-4897-a79a-e5dd4a301b86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="other">
+      <UniqueIdentifier>{1d6427a7-c045-4f1d-8e2b-655fc7d8d4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="draw">
+      <UniqueIdentifier>{6109c61a-c44b-45b0-8d7e-ee391f89e98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sdk">
+      <UniqueIdentifier>{a9be8b50-e03b-4497-b655-86ca7395db60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features">
+      <UniqueIdentifier>{332fb52e-b66e-44ec-8e72-38b856fd4427}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\legit">
+      <UniqueIdentifier>{38616672-af1c-4311-b913-fce0faa15e49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\menu">
+      <UniqueIdentifier>{cfcb0038-4fbd-4971-82ee-c544db1d9333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\other">
+      <UniqueIdentifier>{b5a36b47-c177-46fb-b602-d9af3716525b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\visuals">
+      <UniqueIdentifier>{f21e1036-f8b0-4ea8-ae8e-011a432a3b54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="features\rage">
+      <UniqueIdentifier>{9b11cd03-537f-4483-b32b-3733941a9370}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>inject</Filter>
+    </ClCompile>
+    <ClCompile Include="memory.h">
+      <Filter>inject</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="includes.h">
+      <Filter>definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="definitions.h">
+      <Filter>definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="console.h">
+      <Filter>other</Filter>
+    </ClInclude>
+    <ClInclude Include="hooks.h">
+      <Filter>inject</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="d3d.h">
+      <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="game shit.h">
+      <Filter>inject</Filter>
+    </ClInclude>
+    <ClInclude Include="interfaces.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="game classes.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="offsets.h">
+      <Filter>inject</Filter>
+    </ClInclude>
+    <ClInclude Include="dt_recv.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="game def%27s.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="checksum_crc.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="model shit.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="trace shit.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="math.h">
+      <Filter>definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="beam shit.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="legit.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="backtrack.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="obj%27ects.h">
+      <Filter>features\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="obj_information.h">
+      <Filter>features\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="obj_console.h">
+      <Filter>features\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>features\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="cvars.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="misc.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="esp.h">
+      <Filter>features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="knifebot.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="aimbot.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="models.h">
+      <Filter>features\visuals</Filter>
+    </ClInclude>
+    <ClInclude Include="events.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="obj_spectators.h">
+      <Filter>features\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="ragebot.h">
+      <Filter>features\rage</Filter>
+    </ClInclude>
+    <ClInclude Include="rage.h">
+      <Filter>features\rage</Filter>
+    </ClInclude>
+    <ClInclude Include="autowall.h">
+      <Filter>features\rage</Filter>
+    </ClInclude>
+    <ClInclude Include="configs.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="surface.h">
+      <Filter>draw</Filter>
+    </ClInclude>
+    <ClInclude Include="trigger.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="net shit.h">
+      <Filter>sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>definitions</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_repeater.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+    <ClInclude Include="legit_misc.h">
+      <Filter>features\legit</Filter>
+    </ClInclude>
+    <ClInclude Include="draw.h">
+      <Filter>features\other</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
