@@ -16,9 +16,10 @@ the people whose functions i used and who helped me are marked in the code "(c) 
 * [yougame thread](https://yougame.biz/threads/278694/)
 
 # some cool features
+* aimbot through mouse for SMAC (for rage too, but needs a little rework (like cvars))
 * legit backtrack (needs a little rework (209 in backtrack.h "0.2f" i think) to get more than 10 ticks adequately) with bt chams/dots
 * knifebot with legit backtrack for knife
-* aimbot with avoid from SMAC (cmd->mousedx/y)
+* aimbot through viewangles with little bypass for SMAC (cmd->mousedx/y)
 * self-written menu with console (system allows you to easy add new variables)
 * fake ping (outdated, needs new signature)
 * flashlight spam (with fakelag on 1 makes it invisible)
