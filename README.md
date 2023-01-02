@@ -12,7 +12,7 @@ the people whose functions i used and who helped me are marked in the code "(c) 
 
 # links
 * [showcase](https://www.youtube.com/watch?v=7ej6-iTziOM)
-* uc thread
+* [uc thread](https://www.unknowncheats.me/forum/counterstrike-source/565015-lovemachine-css-steam.html)
 
 # some cool features
 * legit backtrack (needs a little rework (209 in backtrack.h "0.2f" i think) to get more than 10 ticks adequately) with bt chams/dots
