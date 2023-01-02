@@ -11,6 +11,7 @@ code is pretty messy and some features can be outdated/not complete
 * fake ping (outdated, needs new signature)
 * flashlight spam (with fakelag on 1 makes it invisible)
 * nightmode
+* slowmotion
 
 may be i will return to it when i have time and desire to work on it
 
