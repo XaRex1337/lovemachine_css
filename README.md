@@ -25,7 +25,7 @@ the people whose functions i used and who helped me are marked in the code "(c) 
 * nightmode
 * slowmotion
 
-may be i will return to it when i have time and desire to work on it
+maybe i will return to it when i have time and desire to work on it
 
 # console commands
 * echo ... - prints whatever you write
