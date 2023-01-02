@@ -5,7 +5,7 @@ code is pretty messy and some features can be outdated/not complete
 
 # some cool features
 * legit backtrack (needs a little rework (209 in backtrack.h "0.2f" i think) to get more than 10 ticks adequately) with bt chams/dots
-* legit backtrack for knife
+* knifebot with legit backtrack for knife
 * aimbot with avoid from SMAC (cmd->mousedx/y)
 * self-written menu with console (system allows you to easy add new variables) and d3d class (lines are not working and i didn't have time to fix this)
 * fake ping (outdated, needs new signature)
