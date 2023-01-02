@@ -19,7 +19,7 @@ the people whose functions i used and who helped me are marked in the code "(c) 
 * legit backtrack (needs a little rework (209 in backtrack.h "0.2f" i think) to get more than 10 ticks adequately) with bt chams/dots
 * knifebot with legit backtrack for knife
 * aimbot with avoid from SMAC (cmd->mousedx/y)
-* self-written menu with console (system allows you to easy add new variables) and d3d class (lines are not working and i didn't have time to fix this)
+* self-written menu with console (system allows you to easy add new variables)
 * fake ping (outdated, needs new signature)
 * flashlight spam (with fakelag on 1 makes it invisible)
 * nightmode
@@ -39,5 +39,5 @@ variables:
 * vm_fov - viewmodel fov
 * kb_range - knifebot distance to work
 * nightmode - percent of wall darkness
-* antismac - smac proof functions
+* antismac - smac proof functions (not really done yet)
 * ragemode - rage functions
