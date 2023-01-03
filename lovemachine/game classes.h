@@ -86,6 +86,12 @@ public:
 		*(int*)((dword)this + offsets::flags) = flags;
 	}
 
+	void add_eflags(DWORD dwFlags) // (c) iwebz kolo
+	{
+		PINT piEFlags = (PINT)((DWORD)this + 0x170);
+		*piEFlags |= dwFlags;
+	}
+
 	//void get_bullet_type(int a1, float* a2, float* a3)
 	//{
 	//	game::signatures::get_bullet_type(this, a1, a2, a3);
@@ -195,6 +201,12 @@ public:
 		return *(cvector*)((dword)this + offsets::origin);
 	}
 
+	const cvector& get_abs_origin() // (c) iwebz kolo
+	{
+		typedef const Vector& (__thiscall* GetAbsOrg_t)(PVOID);
+		return ((GetAbsOrg_t)(*(PDWORD)(*(PDWORD)(this) + 0x24)))(this);
+	}
+
 	void set_origin(cvector origin)
 	{
 		*(cvector*)((dword)this + offsets::origin) = origin;
@@ -251,9 +263,31 @@ public:
 		return vfunc< get_collideable_fn>(this, 3)(this);
 	}
 
+	PVOID GetCollisionProperty() // (c) iwebz kolo
+	{
+		return (PVOID)((DWORD)this + 0x198);
+	}
+
 	iclientnetworkable* get_clientnetworkable() { return (iclientnetworkable*)((dword)this + 0x8); }
 
 	iclientrenderable* get_clientrenderable() { return (iclientrenderable*)((dword)this + 0x4); }
+
+	void get_render_bounds(Vector& vMins, Vector& vMaxs) // (c) iwebz kolo
+	{
+		PVOID pEnt = (PVOID)this;
+
+		_asm
+		{
+			PUSH vMaxs
+			PUSH vMins
+			MOV ECX, pEnt
+			MOV EAX, DWORD PTR DS : [ECX + 0x4]
+			MOV EDX, DWORD PTR DS : [EAX + 0x50]
+			LEA ESI, DWORD PTR DS : [ECX + 0x4]
+			MOV ECX, ESI
+			CALL EDX
+		}
+	}
 
 	/*const matrix3x4_t& get_coord_frame()
 	{

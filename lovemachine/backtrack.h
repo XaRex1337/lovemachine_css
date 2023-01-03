@@ -75,11 +75,11 @@ namespace legit
 					return;
 				}
 
-				entity->set_origin(this->origin); // SetAbsOrigin
+				/*entity->set_origin(this->origin); // SetAbsOrigin
 				entity->set_velocity(this->velocity); // SetAbsVelocity
 				entity->set_flags(this->flags); // мб сменить на форс анимаций или около того? хз
 				entity->set_simulation_time(this->sim_time); // SetSimulationTime
-				entity->set_angles(this->angles); // SetAbsAngles
+				entity->set_angles(this->angles); // SetAbsAngles*/
 
 				global::cmd->tick_count = this->tick;
 			}

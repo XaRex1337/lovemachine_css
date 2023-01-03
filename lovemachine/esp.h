@@ -25,7 +25,7 @@ namespace esp
 				this->mins = collideable->obb_mins();
 				this->maxs = collideable->obb_maxs();
 				this->coord_frame = collideable->collision_to_world_transform();
-				this->origin = entity->get_origin();
+				this->origin = entity->get_abs_origin();
 				return;
 			}*/
 
@@ -37,7 +37,7 @@ namespace esp
 				//if (sets->visuals.fancy_w2s) this->mins = collideable->obb_mins();
 				//else
 				//{
-					this->origin = entity->get_origin();
+					this->origin = entity->get_abs_origin();
 					this->max_origin = this->origin + Vector(0, 0, collideable->obb_maxs().z);
 					this->origin.z -= 10.f;
 					this->max_origin.z += 10.f;
@@ -48,11 +48,11 @@ namespace esp
 				//this->mins = collideable->obb_mins();
 				//if (sets->visuals.fancy_w2s)
 				//{
-					//this->origin = entity->get_origin();
+					//this->origin = entity->get_abs_origin();
 				//}
 				//else
 				//{
-					this->origin = entity->get_origin();
+					this->origin = entity->get_abs_origin();
 					this->max_origin = this->origin + collideable->obb_maxs();
 					this->origin += collideable->obb_mins();
 				//}

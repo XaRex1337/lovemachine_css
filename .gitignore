@@ -40,3 +40,6 @@
 *.log
 *.tlog
 *.ipch
+*.db-shm
+*.db-wal
+*.opendb

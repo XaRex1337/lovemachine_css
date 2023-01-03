@@ -36,6 +36,32 @@ namespace legit
 			return;
 		}
 
+		//kolonote:
+		//css fix for head triggering (bbox_maxs z component is too small)
+		//credits: me, wav
+		// (c) iwebz kolo
+		/*PVOID pCollisionProperty = entity->GetCollisionProperty();
+
+		PFLOAT pfvecMaxsZ = (PFLOAT)((DWORD)pCollisionProperty + 0x1C);//vecMaxs.z
+		PFLOAT pfvecMaxsZTwo = (PFLOAT)((DWORD)pCollisionProperty + 0x34);//vecMaxs2.z ???
+
+		Vector vMini, vMaxi;
+		entity->get_render_bounds(vMini, vMaxi);
+
+		if (*pfvecMaxsZ != vMaxi.z || *pfvecMaxsZTwo != vMaxi.z)
+		{
+			*pfvecMaxsZ = vMaxi.z;
+			*pfvecMaxsZTwo = vMaxi.z;
+
+			Vector vecSize;
+			VectorSubtract(vMaxi, vMini, vecSize);
+			float fNewRadius = vecSize.Length() * 0.5f;
+
+			*(PFLOAT)((DWORD)pCollisionProperty + 0x38) = fNewRadius;//m_flRadius
+
+			entity->add_eflags(0x4000);
+		}*/
+
 		//knifebot::loop(entity, hitbox_matrix);
 		backtrack::loop(id, entity, hitbox_matrix);
 		aimbot::loop(id, entity, hitbox_matrix);
