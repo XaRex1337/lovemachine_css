@@ -572,6 +572,43 @@ namespace hooks
 			//cout << "curtime : " << global::curtime << endl;
 			//cout << "next_prim_attack : " << global::weapon->next_primary_attack() << endl;
 
+			//kolonote:
+			//css fix for head triggering (bbox_maxs z component is too small)
+			//credits: me, wav
+			// (c) iwebz kolo
+			// TODO: не работает, ломается виз чек, скорее всего - что-то устарело
+			/*for (INT ax = 1; ax <= _engine->get_max_clients(); ax++)
+			{
+				centity* pBaseEntity = _ent_list->get_centity(ax);
+
+				if (!pBaseEntity
+					|| !pBaseEntity->valid()
+					|| pBaseEntity == global::local)
+					continue;
+
+				PVOID pCollisionProperty = pBaseEntity->GetCollisionProperty();
+
+				PFLOAT pfvecMaxsZ = (PFLOAT)((DWORD)pCollisionProperty + 0x1C);//vecMaxs.z
+				PFLOAT pfvecMaxsZTwo = (PFLOAT)((DWORD)pCollisionProperty + 0x34);//vecMaxs2.z ???
+
+				Vector vMini, vMaxi;
+				pBaseEntity->get_render_bounds(vMini, vMaxi);
+
+				if (*pfvecMaxsZ == vMaxi.z && *pfvecMaxsZTwo == vMaxi.z)
+					continue;
+
+				*pfvecMaxsZ = vMaxi.z;
+				*pfvecMaxsZTwo = vMaxi.z;
+
+				Vector vecSize;
+				VectorSubtract(vMaxi, vMini, vecSize);
+				float fNewRadius = vecSize.Length() * 0.5f;
+
+				*(PFLOAT)((DWORD)pCollisionProperty + 0x38) = fNewRadius;//m_flRadius
+
+				pBaseEntity->add_eflags(0x4000);
+			}*/
+
 			if ((sets->legit.enabled && (sets->legit.aim.fov > 0.f || sets->legit.backtrack.enabled || sets->legit.knifebot)) || sets->info.opened || sets->spec.opened || (sets->visuals.enabled && ((sets->visuals.esp_filter[0] && sets->visuals.esp_show[2]) || sets->visuals.crosshair == 2)))
 			{
 				legit::start();

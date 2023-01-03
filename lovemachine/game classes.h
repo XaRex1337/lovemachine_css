@@ -86,9 +86,9 @@ public:
 		*(int*)((dword)this + offsets::flags) = flags;
 	}
 
-	void add_eflags(DWORD dwFlags) // (c) iwebz kolo
+	void add_eflags(DWORD dwFlags) // (c) iwebz kolo and mr-nv <3
 	{
-		PINT piEFlags = (PINT)((DWORD)this + 0x170);
+		PINT piEFlags = (PINT)((DWORD)this + 0x174);
 		*piEFlags |= dwFlags;
 	}
 
@@ -201,7 +201,7 @@ public:
 		return *(cvector*)((dword)this + offsets::origin);
 	}
 
-	const cvector& get_abs_origin() // (c) iwebz kolo
+	const cvector& get_abs_origin() // (c) iwebz kolo and mr-nv <3
 	{
 		typedef const Vector& (__thiscall* GetAbsOrg_t)(PVOID);
 		return ((GetAbsOrg_t)(*(PDWORD)(*(PDWORD)(this) + 0x24)))(this);
@@ -263,7 +263,7 @@ public:
 		return vfunc< get_collideable_fn>(this, 3)(this);
 	}
 
-	PVOID GetCollisionProperty() // (c) iwebz kolo
+	PVOID get_collision_property() // (c) iwebz kolo and mr-nv <3
 	{
 		return (PVOID)((DWORD)this + 0x198);
 	}

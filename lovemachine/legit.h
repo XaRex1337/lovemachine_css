@@ -40,6 +40,7 @@ namespace legit
 		//css fix for head triggering (bbox_maxs z component is too small)
 		//credits: me, wav
 		// (c) iwebz kolo
+		// TODO: пофиксить ради норм триггера
 		/*PVOID pCollisionProperty = entity->GetCollisionProperty();
 
 		PFLOAT pfvecMaxsZ = (PFLOAT)((DWORD)pCollisionProperty + 0x1C);//vecMaxs.z

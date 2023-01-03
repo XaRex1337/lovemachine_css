@@ -75,6 +75,7 @@ namespace legit
 					return;
 				}
 
+				// (c) mr-nv <3
 				/*entity->set_origin(this->origin); // SetAbsOrigin
 				entity->set_velocity(this->velocity); // SetAbsVelocity
 				entity->set_flags(this->flags); // мб сменить на форс анимаций или около того? хз
