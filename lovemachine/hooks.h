@@ -26,6 +26,8 @@ namespace hooks
 	wndproc o_wndproc;
 	LRESULT __stdcall wndproc_hook(hwnd wnd, uint msg, wparam w_param, lparam l_param)
 	{
+		global::realtime = (float)GetTickCount64() / 1000.f;
+
 		switch (msg)
 		{
 		case WM_LBUTTONDOWN:
@@ -311,7 +313,6 @@ namespace hooks
 		if (top_panel == 0 || top_panel != vguiPanel || !_engine->in_game() || !global::local || sets->menu.panic) return;
 
 		//surf::font::draw(surf::font::esp, 100, 100, color(200, 200, 200), null, "text text text");
-		global::realtime = (float)GetTickCount64() / 1000.f;
 
 		if (sets->misc.draw_mode == 0) misc::draw::draw();
 
@@ -861,17 +862,15 @@ namespace hooks
 		o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, origin, direction, shit, update_positions, soundtime, speakerentity);
 	}*/
 
-	/*memory::vthook* event_manager;
+	memory::vthook* event_manager;
 	using fire_event_clientside_fn = bool(__stdcall*)(igameevent*);
 	fire_event_clientside_fn o_fire_event_clientside;
 	bool __stdcall fire_event_clientside_hook(igameevent* p_event)
 	{
-		auto result = o_fire_event_clientside(p_event);
+		events::on_fire_event(p_event, p_event->get_name());
 
-		cout << "p_event->get_name() : " << p_event->get_name() << endl;
-
-		return result;
-	}*/
+		return o_fire_event_clientside(p_event);
+	}
 
 	void do_them()
 	{// старый		long -> wndproc			  наш wndproc	   окно cs:go	задать новый адрес					    новый адрес
@@ -943,10 +942,10 @@ namespace hooks
 		//o_emit_sound = (emit_sound_fn)engine_sound->hook_function((dword)emit_sound_hook, 4);
 		//console::write_hex("/hook/ o_emit_sound", (dword)o_emit_sound, darkgreen);
 
-		//event_manager = new memory::vthook((dword**)_event_manager);
-		//console::write_hex("/vthook/ event_manager", (dword)event_manager, darkgreen);
-		//o_fire_event_clientside = (fire_event_clientside_fn)event_manager->hook_function((dword)fire_event_clientside_hook, 10);
-		//console::write_hex("/hook/ o_fire_event_clientside", (dword)o_fire_event_clientside, darkgreen);
+		event_manager = new memory::vthook((dword**)_event_manager);
+		console::write_hex("/vthook/ event_manager", (dword)event_manager, darkgreen);
+		o_fire_event_clientside = (fire_event_clientside_fn)event_manager->hook_function((dword)fire_event_clientside_hook, 10);
+		console::write_hex("/hook/ o_fire_event", (dword)o_fire_event_clientside, darkgreen);
 	}
 
 	void remove()

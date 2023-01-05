@@ -3,8 +3,11 @@
 #include "definitions.h"
 #include "color.h"
 
+//#define DEBUG_LOG
+
 fstream myfile;
 
+// TODO: сделать это дерьмо юзабельным
 namespace console
 {
 	// тип консоли

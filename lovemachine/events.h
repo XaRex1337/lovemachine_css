@@ -48,44 +48,47 @@ namespace events
 			font::draw(font::hitmarker_small, pos_x, pos_y, color(20, 255, 20, alpha), DT_CENTER | DT_VCENTER, text.c_str());
 		}
 
-		void on_inject()
+		void on_fire_event(igameevent* event, const char* name)
 		{
-			auto player_hurt = new custom_listener([](igameevent* event)
+			if (strcmp(name, "player_hurt") != 0)
+				return;
+
+			health_left = event->get_int("health");
+			if (_engine->get_player_for_userid(event->get_int("userid")) == global::local_id && health_left == 0)
+			{
+				killstreak = 0;
+			}
+
+			if (_engine->get_player_for_userid(event->get_int("attacker")) != global::local_id)
+				return;
+
+			if (sets->misc.killshot && health_left == 0)
+			{
+				killstreak2++;
+				_engine->clientcmd_unrestricted(str(u8"say Обоссал и выставил на мороз! Streak Of " + to_str(killstreak2) + u8"!").c_str());
+			}
+
+			if (sets->visuals.enabled && sets->visuals.hitmarker)
+			{
+				damage_did += event->get_int("dmg_health");
+			}
+
+			if (health_left == 0)
+			{
+				if (sets->visuals.enabled && sets->visuals.hitmarker)
 				{
-					health_left = event->get_int("health");
-					if (_engine->get_player_for_userid(event->get_int("userid")) == global::local_id && health_left == 0)
-					{
-						killstreak = 0;
-					}
-
-					if (_engine->get_player_for_userid(event->get_int("attacker")) != global::local_id)
-						return;
-
-					if (sets->misc.killshot && health_left == 0)
-					{
-						killstreak2++;
-						_engine->clientcmd_unrestricted(str(u8"say Обоссал и выставил на мороз! Streak Of " + to_str(killstreak2) + u8"!").c_str());
-					}
-
-					if ((sets->legit.aim.kill_delay == 0.f && (!sets->visuals.enabled || !sets->visuals.hitmarker))) return;
-
-					damage_did += event->get_int("dmg_health");
-					if (health_left == 0)
-					{
-						killstreak++;
-						auto weapon = event->get_string("weapon");
-						if (strstr(weapon, "knife")) text = "KNIFED";
-						else if (event->get_int("hitgroup") == 1) text = "HEADSHOT";
-						else if (strstr(weapon, "grenade") || strstr(weapon, "flash")) text = "GRENADE";
-						else text = "KILLED";
-						if (killstreak > 1) text += " X" + killstreak;
-						kill_timer = global::realtime + 3.f;
-						legit::aimbot::kill_delay = global::curtime + sets->legit.aim.kill_delay;
-					}
-					timer = global::realtime + 4.f;
-				});
-
-			_event_manager->add_listener(player_hurt, "player_hurt", false);
+					killstreak++;
+					auto weapon = event->get_string("weapon");
+					if (strstr(weapon, "knife")) text = "KNIFED";
+					else if (event->get_int("hitgroup") == 1) text = "HEADSHOT";
+					else if (strstr(weapon, "grenade") || strstr(weapon, "flash")) text = "GRENADE";
+					else text = "KILLED";
+					if (killstreak > 1) text += " X" + killstreak;
+					kill_timer = global::realtime + 3.f;
+				}
+				legit::aimbot::kill_delay = sets->legit.aim.kill_delay != 0.f ? global::curtime + sets->legit.aim.kill_delay : 0.f;
+			}
+			timer = global::realtime + 4.f;
 		}
 		
 		void on_draw()
@@ -149,37 +152,22 @@ namespace events
 		float f_exp_time = 0.f;
 		float f_def_time = 0.f;
 
-		void on_inject()
+		inline void on_fire_event(igameevent* event, const char* name)
 		{
-			auto bomb_planted = new custom_listener([](igameevent* event)
-				{
-					planted = true;
-					explosion_time = 0.f;
-					defuse_time = 0.f;
-				});
-			_event_manager->add_listener(bomb_planted, "bomb_planted", false);
-
-			auto bomb_end = new custom_listener([](igameevent* event)
-				{
-					planted = false;
-					explosion_time = 0.f;
-					defuse_time = 0.f;
-				});
-			_event_manager->add_listener(bomb_end, "bomb_exploded", false);
-			_event_manager->add_listener(bomb_end, "bomb_defused", false);
-
-			auto bomb_begindefuse = new custom_listener([](igameevent* event)
-				{
-					f_def_time = event->get_bool("haskit") ? 5.f : 10.f;
-					defuse_time = global::curtime + f_def_time;
-				});
-			_event_manager->add_listener(bomb_begindefuse, "bomb_begindefuse", false);
-
-			auto bomb_abortdefuse = new custom_listener([](igameevent* event)
-				{
-					defuse_time = 0.f;
-				});
-			_event_manager->add_listener(bomb_abortdefuse, "bomb_abortdefuse", false);
+			if (strcmp(name, "bomb_planted") == 0) {
+				planted = true;
+				explosion_time = 0.f;
+				defuse_time = 0.f;
+			} else if (strcmp(name, "bomb_exploded") == 0 || strcmp(name, "bomb_defused") == 0) { // end
+				planted = false;
+				explosion_time = 0.f;
+				defuse_time = 0.f;
+			} else if (strcmp(name, "bomb_begindefuse") == 0) {
+				f_def_time = event->get_bool("haskit") ? 5.f : 10.f;
+				defuse_time = global::curtime + f_def_time;
+			} else if (strcmp(name, "bomb_abortdefuse") == 0) {
+				defuse_time = 0.f;
+			}
 		}
 
 		void on_draw()
@@ -202,21 +190,20 @@ namespace events
 			font::draw(font::hitmarker_small, x + 5, 10, color(0, 255 * percent2, 255 - (255 * percent2)), DT_CENTER | DT_VCENTER, "%.1f", (defuse_time - global::curtime));
 		}
 	}
-	
-	void on_inject()
-	{
-		auto round_start_listener = new custom_listener([](igameevent* event)
-			{
-				hitmarker::killstreak2 = hitmarker::timer = hitmarker::kill_timer = bomb_timer::defuse_time = bomb_timer::explosion_time = legit::aimbot::kill_delay = 0.f;
-				bomb_timer::planted = false;
-				misc::draw::clear(false);
-				//ZeroMemory(legit::backtrack::records, sizeof(legit::backtrack::records));
-				//ZeroMemory(server::players, sizeof(server::players));
-			});
-		_event_manager->add_listener(round_start_listener, "round_start", false);
 
-		hitmarker::on_inject();
-		bomb_timer::on_inject();
+	inline void on_fire_event(igameevent* event, const char* name)
+	{
+		if (strcmp(name, "round_start") == 0)
+		{
+			hitmarker::killstreak2 = hitmarker::timer = hitmarker::kill_timer = bomb_timer::defuse_time = bomb_timer::explosion_time = legit::aimbot::kill_delay = 0.f;
+			bomb_timer::planted = false;
+			misc::draw::clear(false);
+			//ZeroMemory(legit::backtrack::records, sizeof(legit::backtrack::records));
+			//ZeroMemory(server::players, sizeof(server::players));
+		}
+
+		hitmarker::on_fire_event(event, name);
+		bomb_timer::on_fire_event(event, name);
 	}
 
 	void on_draw()

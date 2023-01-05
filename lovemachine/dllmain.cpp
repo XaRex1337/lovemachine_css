@@ -14,13 +14,14 @@ handle hthread = 0x0;
 
 void thread()
 {
+#ifdef DEBUG_LOG
 	console::create("lovemachine debug console");
 	myfile.open("c:/lovemachine/log.txt");
 	myfile << "welcome to lovemachine / text log open" << endl;
+#endif
 	game::find();
 	offsets::find_them();
 	models::on_inject();
-	events::on_inject();
 	configs::on_inject();
 	hooks::do_them();
 	ZeroMemory(legit::backtrack::records, sizeof(legit::backtrack::records)); // TODO : вставить куда-нибудь еще (legit::on_inject)

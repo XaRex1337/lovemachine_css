@@ -45,7 +45,7 @@ public:
 	ccvar(const char* name, const char* comment, float def_value, float min = 0, float max = 100, int type = -1)
 	{
 		this->name = name;
-		this->comment = comment != "" ? str(" is " + str(comment)) : " with no definition";
+		this->comment = comment != "" ? str(" is " + str(comment)) : " *no definition*";
 		this->value = def_value;
 		this->min = min;
 		this->max = max;
