@@ -2,6 +2,7 @@
 #include "game shit.h"
 #include "global.h"
 #include "legit_misc.h"
+#include "autowall.h"
 //#include "aimbot.h" // TODO: сделать папку для legit, сделать файл misc для set_points/get_point
 
 #define tick_interval _globals->interval_per_tick
@@ -91,7 +92,7 @@ namespace legit
 					time_to_ticks(fabs(entity->get_simulation_time() - this->sim_time)) <= sets->legit.backtrack.ticks);
 			}
 
-			cvector get_point(bool check_visibility, centity* entity, float* fov, int* bone_id, qangle* angle = nullptr)
+			cvector get_point(bool check_visibility, bool check_penetration, centity* entity, float* fov, int* bone_id, qangle* angle = nullptr)
 			{
 				const auto viewangle = global::cmd->viewangles + global::local->get_punch() * 2.f;
 				const auto eye_pos = global::local->get_eye_pos();
@@ -100,7 +101,15 @@ namespace legit
 				{
 					if (p_point.vector.IsZero()) continue;
 
-					if (check_visibility && !this->is_visible(entity, p_point.vector)/*entity->visible(p_point)*/) continue;
+					bool visible = this->is_visible(entity, p_point.vector);
+					bool penetrable = false;
+					if (check_penetration && !visible)
+					{
+						weaponinfo_t w;
+						get_weapon_info(global::weapon->get_weaponid(), global::weapon->is_silenced(), w);
+						penetrable = rage::autowall::is_penetrable(w, eye_pos, p_point.vector);
+					}
+					if (check_visibility && !visible && !penetrable) continue;
 
 					auto calced = calc_angle(eye_pos, p_point.vector);
 					auto p_fov = get_fov(viewangle, calced);

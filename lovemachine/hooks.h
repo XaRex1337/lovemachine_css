@@ -558,7 +558,10 @@ namespace hooks
 			global::weapon = global::local->get_weapon();
 			auto observed = global::local->get_spec_player();
 			global::local_observed = (global::local->valid() || observed == nullptr || global::local->get_spec_mode() != 4) ? global::local : observed;
-			
+			//weaponinfo_t w;
+			//get_weapon_info(global::weapon->get_weaponid(), global::weapon->is_silenced(), w);
+			//console::write(str(to_str(w.fPenetrationDistance) + " " + to_str(w.fPenetrationPower) + " " + to_str(w.iBulletType)), color::enabled());
+			//cout << dec << w.fPenetrationDistance << " " << w.fPenetrationPower << " " << w.iBulletType << endl;
 			
 			//obj::spectators::target = global::local->valid() ? global::local : global::local->get_spec_player();
 			//auto p_weapon = global::local->get_weapon();
@@ -612,9 +615,9 @@ namespace hooks
 
 			if ((sets->legit.enabled && (sets->legit.aim.fov > 0.f || sets->legit.backtrack.enabled || sets->legit.knifebot)) || sets->info.opened || sets->spec.opened || (sets->visuals.enabled && ((sets->visuals.esp_filter[0] && sets->visuals.esp_show[2]) || sets->visuals.crosshair == 2)))
 			{
-				legit::start();
-
 				server::local.type = global::weapon->get_type();
+
+				legit::start();
 
 				for (int id = 0; id < _engine->get_max_clients(); id++)
 				{

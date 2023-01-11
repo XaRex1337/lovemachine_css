@@ -26,6 +26,7 @@ namespace game
 		icvar* cvar;
 		cglobalvars* globals;
 		cinput* input;
+		iphysicssurfaceprops* physics;
 
 		void find_them()
 		{
@@ -75,6 +76,9 @@ namespace game
 
 			event_manager = memory::pinterface<igameeventmanager>("engine.dll", "GAMEEVENTSMANAGER002");
 			console::write_hex("/interface/ event_manager", (dword)event_manager, darkgreen);
+
+			physics = memory::pinterface<iphysicssurfaceprops>("vphysics.dll", "VPhysicsSurfaceProps001");
+			console::write_hex("/interface/ physics", (dword)physics, darkgreen);
 		}
 	}
 
@@ -83,9 +87,13 @@ namespace game
 		dword d3d9_device;
 		//iclientmode* clientmode;
 		dword clientmode;
+		dword bullet_params;
 		get_data_fn get_wpn_data;
 		//get_bullet_type_fn get_bullet_type;
 		cclientstate* clientstate;
+
+		typedef void (*ClipTraceToPlayers_t)(const Vector&, const Vector&, unsigned int, itracefilter*, trace_t*);
+		ClipTraceToPlayers_t  ClipTraceToPlayers;
 
 		void find_them()
 		{
@@ -94,6 +102,10 @@ namespace game
 
 			clientmode = **reinterpret_cast<dword**>(memory::pattern("client.dll", "8B 0D ? ? ? ? 8B 01 5D FF 60 28 CC") + 0x2);
 			console::write_hex("/signature/ clientmode", clientmode, darkgreen);
+
+			// (c) mr-nv <3
+			bullet_params = memory::pattern("client.dll", "55 8B EC 56 8B 75 08 68 ? ? ? ? 56 E8 ? ? ? ? 83 C4 08 84 C0");
+			console::write_hex("/signature/ bullet_params", bullet_params, darkgreen);
 
 			// TODO: ÎÁÍÎÂÈÒÜ È ÂÅÐÍÓÒÜ
 			// thx catalindragan22 (c) // uc
@@ -109,6 +121,10 @@ namespace game
 			dword lock_cursor = memory::pattern("vguimatsurface.dll", "A3 ? ? ? ? C6 05") + 0x7;
 			global::lock_cursor = *(bool**)(lock_cursor);
 			console::write_hex("/signature/ lock_cursor", (dword)global::lock_cursor, darkgreen);
+
+			dword cliptracetoplayers = memory::pattern("client.dll", "53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 81 EC ? ? ? ? 8B 43 18");
+			ClipTraceToPlayers = (ClipTraceToPlayers_t)(cliptracetoplayers);
+			console::write_hex("/signature/ ClipTraceToPlayers", (dword)ClipTraceToPlayers, darkgreen);
 
 			/*dword bullet_type = memory::pattern("server.dll", "E8 ? ? ? ? F3 0F 10 43 ? F3 0F 10 A5 ? ? ? ?") + 0x7;
 			get_bullet_type = (get_bullet_type_fn)(bullet_type);
@@ -140,4 +156,5 @@ namespace game
 #define _globals game::interfaces::globals
 #define _input game::interfaces::input
 #define _clientmode game::signatures::clientmode
+#define _phys game::interfaces::physics
 //#define _clientstate game::signatures::clientstate

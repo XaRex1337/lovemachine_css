@@ -66,6 +66,7 @@ namespace menu
 					if (cvar(ragemode).value)
 					{
 						//obj::checkbox(obj::legit, "autoscope", sets->rage.autoscope);
+						obj::checkbox(obj::legit, "autowall", sets->rage.autowall);
 						obj::checkbox(obj::legit, "autoshoot", sets->rage.autoshoot);
 						obj::checkbox(obj::legit, "autostop", sets->rage.autostop);
 						if (!cvar(antismac).value) obj::checkbox(obj::legit, "silent", sets->rage.silent);
@@ -114,7 +115,6 @@ namespace menu
 				{
 					obj::combo_t aim_bone(obj::legit, "aim_bone", obj::hitbox, sets->legit.aim.hitbox, ARRAYSIZE(obj::hitbox));
 					obj::slider<float>(obj::legit, "fov", sets->legit.aim.fov, 0.f, cvar(ragemode).value ? 180.f : 10.f, "%.1f");
-					obj::slider<float>(obj::legit, "hitchance", sets->rage.hitchance, 0.f, 1.f, "%f");
 					if (!cvar(ragemode).value)
 					{
 						obj::slider<float>(obj::legit, "smooth_x", sets->legit.aim.smooth[0], 0.f, 50.f, "%.1f");
@@ -125,6 +125,10 @@ namespace menu
 						obj::slider<float>(obj::legit, "humanize_y", sets->legit.aim.humanize[1], 0.f, 2.f, "%.2f");
 						obj::slider<float>(obj::legit, "kill_delay", sets->legit.aim.kill_delay, 0.f, 1.f, "%.2f");
 						obj::slider<float>(obj::legit, "shot_delay", sets->legit.aim.shot_delay, 0.f, 0.2f, "%.3f");
+					}
+					else
+					{
+						obj::slider<float>(obj::legit, "hitchance", sets->rage.hitchance, 0.f, 1.f, "%f");
 					}
 					aim_bone.on_draw();
 

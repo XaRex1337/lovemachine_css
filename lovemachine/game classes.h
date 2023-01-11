@@ -32,6 +32,12 @@ public:
 		return id;
 	}
 
+	bool is_player() // (c) iwebz kolo <3
+	{
+		typedef bool(__thiscall* IsPlayer_t)(PVOID);
+		return ((IsPlayer_t)(*(PDWORD)(*(PDWORD)(this) + 0x200)))(this);
+	}
+
 	int get_hp()
 	{
 		return *(int*)((dword)this + offsets::health);
@@ -435,12 +441,33 @@ public:
 	}
 };
 
+typedef struct
+{
+	int iBulletType;//CSS only
+	int iPenetration;//CSS only
+	int iDamage;
+	float fMaxRange;
+	float fRangeModifier;
+	float fPenetrationPower;
+	float fPenetrationDistance;//CSS only
+} weaponinfo_t;
+
 class cweapon
 {
 public:
 	fileweaponinfo_t& get_data()
 	{
 		return game::signatures::get_wpn_data();
+	}
+
+	bool is_silenced()
+	{
+		if (!this) return false;
+		
+		if (this->get_weaponid() == weapon_usp) return *(bool*)((dword)this + offsets::usp_silencer);
+		else if (this->get_weaponid() == weapon_m4a1) return *(bool*)((dword)this + offsets::m4a1_silencer);
+
+		return false;
 	}
 
 	float next_primary_attack()
@@ -514,7 +541,7 @@ public:
 			return weap_rifle;
 		case weapon_mac10: case weapon_tmp: case weapon_mp5: case weapon_ump: case weapon_p90:
 			return weap_sub;
-		case weapon_m3: case weapon_xm014: 
+		case weapon_m3: case weapon_xm1014: 
 			return weap_shot;
 		case weapon_m249:
 			return weap_heavy;
@@ -548,7 +575,7 @@ public:
 		case weapon_g3sg1: case weapon_glock: case weapon_fiveseven: return 20;
 		case weapon_awp: return 10;
 		case weapon_usp: return 12;
-		case weapon_xm014: case weapon_deagle: return 7;
+		case weapon_xm1014: case weapon_deagle: return 7;
 		case weapon_m3: return 8;
 		case weapon_p228: return 13;
 		case weapon_p90: return 50;
@@ -606,6 +633,276 @@ public:
 		return weapon_names[id];
 	}
 };
+
+// iwebz kolo (c)
+void get_weapon_info(int weaponid, bool silencer, weaponinfo_t& winfo)
+{
+	weaponinfo_t wiInfo;
+	switch (weaponid)
+	{
+	case weapon_ak47:
+	{
+		wiInfo.iBulletType = 2;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 36;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.98f;
+		break;
+	}
+
+	case weapon_aug:
+	{
+		wiInfo.iBulletType = 2;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 32;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.96f;
+		break;
+	}
+
+	case weapon_awp:
+	{
+		wiInfo.iBulletType = 5;
+		wiInfo.iPenetration = 3;
+		wiInfo.iDamage = 115;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.99f;
+		break;
+	}
+
+	case weapon_deagle:
+	{
+		wiInfo.iBulletType = 1;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 54;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.81f;
+		break;
+	}
+
+	case weapon_elites:
+	{
+		wiInfo.iBulletType = 6;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 45;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.75f;
+		break;
+	}
+
+	case weapon_famas:
+	{
+		wiInfo.iBulletType = 3;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 30;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.96f;
+		break;
+	}
+
+	case weapon_fiveseven:
+	{
+		wiInfo.iBulletType = 10;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 25;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.885f;
+		break;
+	}
+
+	case weapon_g3sg1:
+	{
+		wiInfo.iBulletType = 2;
+		wiInfo.iPenetration = 3;
+		wiInfo.iDamage = 80;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.98f;
+		break;
+	}
+
+	case weapon_galil:
+	{
+		wiInfo.iBulletType = 3;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 30;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.98f;
+		break;
+	}
+
+	case weapon_glock:
+	{
+		wiInfo.iBulletType = 6;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 25;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.75f;
+		break;
+	}
+
+	case weapon_m249:
+	{
+		wiInfo.iBulletType = 4;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 32;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.97f;
+		break;
+	}
+
+	case weapon_m4a1:
+	{
+		wiInfo.iBulletType = 3;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 33;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = (silencer ? 0.95f : 0.97f);
+		break;
+	}
+
+	case weapon_mac10:
+	{
+		wiInfo.iBulletType = 8;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 29;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.82f;
+		break;
+	}
+
+	case weapon_mp5:
+	{
+		wiInfo.iBulletType = 6;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 26;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.84f;
+		break;
+	}
+
+	case weapon_p228:
+	{
+		wiInfo.iBulletType = 9;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 40;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.8f;
+		break;
+	}
+
+	case weapon_p90:
+	{
+		wiInfo.iBulletType = 10;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 26;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.84f;
+		break;
+	}
+
+	case weapon_scout:
+	{
+		wiInfo.iBulletType = 2;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 75;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.98f;
+		break;
+	}
+
+	case weapon_sg550:
+	{
+		wiInfo.iBulletType = 3;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 70;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.98f;
+		break;
+	}
+
+	case weapon_sg552:
+	{
+		wiInfo.iBulletType = 3;
+		wiInfo.iPenetration = 2;
+		wiInfo.iDamage = 33;
+		wiInfo.fMaxRange = 8192.0f;
+		wiInfo.fRangeModifier = 0.955f;
+		break;
+	}
+
+	case weapon_tmp:
+	{
+		wiInfo.iBulletType = 6;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 26;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.84f;
+		break;
+	}
+
+	case weapon_ump:
+	{
+		wiInfo.iBulletType = 8;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 30;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.82f;
+		break;
+	}
+
+	case weapon_usp:
+	{
+		wiInfo.iBulletType = 8;
+		wiInfo.iPenetration = 1;
+		wiInfo.fMaxRange = 4096.0f;
+		wiInfo.fRangeModifier = 0.79f;
+		wiInfo.iDamage = (silencer ? 30 : 34);
+		break;
+	}
+	case weapon_xm1014:
+	{
+		wiInfo.iBulletType = 7;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 22;
+		wiInfo.fRangeModifier = 0.7f;
+		wiInfo.fMaxRange = 3000.0f;
+		break;
+	}
+	case weapon_m3:
+	{
+		wiInfo.iBulletType = 7;
+		wiInfo.iPenetration = 1;
+		wiInfo.iDamage = 26;
+		wiInfo.fRangeModifier = 0.7f;
+		wiInfo.fMaxRange = 3000.0f;
+		break;
+	}
+	default:
+	{
+		break;
+	}
+	}
+
+	float fPenDist;
+	float fPenPow;
+
+	int iBulletTup = wiInfo.iBulletType;
+
+	__asm
+	{
+		LEA ECX, fPenDist
+		PUSH ECX
+		LEA EDX, fPenPow
+		PUSH EDX
+		PUSH iBulletTup
+		CALL game::signatures::bullet_params
+	}
+
+	wiInfo.fPenetrationDistance = fPenDist;
+	wiInfo.fPenetrationPower = fPenPow;
+
+	winfo = wiInfo;
+}
 
 class cusercmd
 {

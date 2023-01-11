@@ -116,6 +116,20 @@ public:
 	void* skip, *target;
 };
 
+class ctracefilternoplayer
+{
+public:
+	virtual bool ShouldHitEntity(centity* entity, int contentsMask)
+	{
+		return !entity->is_player();
+	}
+
+	virtual tracetype_t GetTraceType() const
+	{
+		return TRACE_EVERYTHING;
+	}
+};
+
 // plane_t structure
 // !!! if this is changed, it must be changed in asm code too !!!
 // FIXME: does the asm code even exist anymore?
@@ -134,6 +148,27 @@ struct csurface_t
 	const char* name;
 	short		surfaceProps;
 	unsigned short	flags;		// BUGBUG: These are declared per surface, not per material, but this database is per-material now
+};
+
+class CSimpleTraceFilter : public itracefilter
+{
+public:
+	CSimpleTraceFilter(PVOID pEnt)
+	{
+		m_pPassEnt = pEnt;
+	}
+
+	virtual bool ShouldHitEntity(ihandleentity* pHandleEntity, int contentsMask)
+	{
+		return pHandleEntity != m_pPassEnt;
+	}
+
+	virtual tracetype_t	GetTraceType() const
+	{
+		return TRACE_EVERYTHING;
+	}
+
+	PVOID m_pPassEnt;
 };
 
 class CBaseTrace

@@ -3,9 +3,9 @@
 #include "definitions.h"
 #include "color.h"
 
-//#define DEBUG_LOG
+#define DEBUG_LOG
 
-fstream myfile;
+ofstream myfile;
 
 // TODO: сделать это дерьмо юзабельным
 namespace console
@@ -68,6 +68,8 @@ namespace console
 		set_color(color);
 		cout << text << " : " << "0x" << val << endl;
 		myfile << text << " : " << "0x" << val << endl;
+		cout << dec;
+		myfile << dec;
 	}
 
 	void add_line()

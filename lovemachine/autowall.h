@@ -7,9 +7,174 @@
 
 namespace rage
 {
+	// (c) iwebz kolo
 	namespace autowall
 	{
-		void get_material_params(int a1, float* a2, float* a3)
+#define	CHAR_TEX_CONCRETE		'C'
+#define CHAR_TEX_DIRT			'D'
+#define CHAR_TEX_GRATE			'G'
+#define CHAR_TEX_METAL			'M'
+#define CHAR_TEX_COMPUTER		'P'
+#define CHAR_TEX_TILE			'T'
+#define CHAR_TEX_VENT			'V'
+#define CHAR_TEX_WOOD			'W'
+#define CHAR_TEX_GLASS			'Y'
+
+		void GetMaterialParameters(char sMaterial, float& fPenetrationPowerModifier, float& fDamageModifier)
+		{
+			switch (sMaterial)
+			{
+			case CHAR_TEX_METAL:
+				fPenetrationPowerModifier = 0.5;
+				fDamageModifier = 0.3;
+				break;
+			case CHAR_TEX_DIRT:
+				fPenetrationPowerModifier = 0.5;
+				fDamageModifier = 0.3;
+				break;
+			case CHAR_TEX_CONCRETE:
+				fPenetrationPowerModifier = 0.4;
+				fDamageModifier = 0.25;
+				break;
+			case CHAR_TEX_GRATE:
+				fPenetrationPowerModifier = 1.0;
+				fDamageModifier = 0.99;
+				break;
+			case CHAR_TEX_VENT:
+				fPenetrationPowerModifier = 0.5;
+				fDamageModifier = 0.45;
+				break;
+			case CHAR_TEX_TILE:
+				fPenetrationPowerModifier = 0.65;
+				fDamageModifier = 0.3;
+				break;
+			case CHAR_TEX_COMPUTER:
+				fPenetrationPowerModifier = 0.4;
+				fDamageModifier = 0.45;
+				break;
+			case CHAR_TEX_WOOD:
+				fPenetrationPowerModifier = 1.0;
+				fDamageModifier = 0.6;
+				break;
+			default:
+				fPenetrationPowerModifier = 1.0;
+				fDamageModifier = 0.5;
+				break;
+			}
+		}
+
+		bool is_penetrable(weaponinfo_t& wiWeaponInfo, Vector vStart, Vector vEnd)
+		{
+			trace_t trace;
+
+			ctracefilternoplayer filter;
+			itracefilter* pTraceFilter = (itracefilter*)&filter;
+
+			Vector vSource = vStart, vEnding, vDir = (vEnd - vStart), vClip;
+			vDir.NormalizeInPlace();
+
+			float fTmpLength, fSumDist, fPow;
+
+			int iPenetration = wiWeaponInfo.iPenetration;
+
+			float fCurrentDamage = wiWeaponInfo.iDamage;
+
+			float fPenetrationPower = wiWeaponInfo.fPenetrationPower;
+
+			float fRange = Vector(vEnd - vStart).Length();
+
+			while (fCurrentDamage > 0.0f)
+			{
+				ray_t ray;
+				ray.Init(vSource, vEnd);
+				_engine_trace->trace_ray(ray, 0x4600400B, pTraceFilter, &trace);
+
+				vClip = (vDir * 40.0f) + vEnd;
+
+				game::signatures::ClipTraceToPlayers(vSource, vClip, 0x4600400B, pTraceFilter, &trace);
+
+				if (trace.fraction == 1.0f)
+					return true;
+
+				surfacedata_t* pSurfaceData = _phys->get_surfacedata(trace.surface.surfaceProps);
+
+				bool bGrate = (trace.contents & 0x8);
+
+				fTmpLength = (fSumDist + ((fRange - fSumDist) * trace.fraction));
+
+				fPow = (pow(wiWeaponInfo.fRangeModifier, (fTmpLength * 0.002f)));
+				fCurrentDamage *= fPow;
+
+				if (fTmpLength > wiWeaponInfo.fPenetrationDistance)
+					iPenetration = ((iPenetration <= 0) ? iPenetration : 0);
+
+				if (iPenetration < 0 || (iPenetration == 0 && !bGrate))
+					break;
+
+				float fPenetrationPowerModifier;
+				float fDamageModifier;
+
+				unsigned short iMaterial = pSurfaceData->game.material;
+				char sMaterial = (char)iMaterial;
+
+				GetMaterialParameters(sMaterial, fPenetrationPowerModifier, fDamageModifier);
+
+				if (bGrate)
+				{
+					fPenetrationPowerModifier = 1.0f;
+					fDamageModifier = 0.99f;
+				}
+
+				Vector vEndPos2;
+
+				float multiplier = 24;
+
+				for (; ; multiplier += 24)
+				{
+					vEndPos2 = (trace.endpos + (vDir * multiplier));
+
+					if (!(_engine_trace->get_point_contents(vEndPos2, NULL) & 0x200400B))
+						break;
+
+					if (multiplier > 128)
+						return false;
+				}
+
+				trace_t trace2;
+
+				ray.Init(vEndPos2, trace.endpos);
+				_engine_trace->trace_ray(ray, 0x4600400B, 0, &trace2);
+
+				if ((trace2.m_pEnt != trace.m_pEnt) && trace2.m_pEnt)
+				{
+					CSimpleTraceFilter pTraceTwoFilter(trace2.m_pEnt);
+
+					ray.Init(vEndPos2, trace.endpos);
+					_engine_trace->trace_ray(ray, 0x4600400B, (itracefilter*)&pTraceTwoFilter, &trace2);
+				}
+
+				float fNewTempLength = Vector(trace2.endpos - trace.endpos).Length();
+
+				if (_phys->get_surfacedata(trace2.surface.surfaceProps)->game.material == iMaterial && (iMaterial == 87 || iMaterial == 77))
+					fPenetrationPowerModifier += fPenetrationPowerModifier;
+
+				if (fNewTempLength > (fPenetrationPower * fPenetrationPowerModifier))
+					break;
+				fPenetrationPower -= (fNewTempLength / fPenetrationPowerModifier);
+
+				vSource = trace2.endpos;
+
+				fCurrentDamage *= fDamageModifier;
+
+				fSumDist = fTmpLength + fNewTempLength;
+
+				--iPenetration;
+			}
+
+			return false;
+		}
+
+		/*void get_material_params(int a1, float* a2, float* a3)
 		{
 			//sig = E8 ? ? ? ? 8B 85 ? ? ? ? 83 C4 0C, relative call
 			float* result; // eax
@@ -67,7 +232,7 @@ namespace rage
 			ray.Init(vecAbsStart, vecAbsEnd);
 			CTraceFilterSkipTwoEntities traceFilter(ignore, ignore2, collisionGroup);
 			g_pEngineTrace->TraceRay(ray, mask, &traceFilter, ptr);
-		}*/
+		}//
 
 
 		// GDPR_Anonymous uc <3
@@ -167,7 +332,7 @@ namespace rage
 			int iDamage = *((int*)wpndata + 546);
 			float flRangeModifier = *((float*)wpndata + 548);
 			int iPenetration;
-			if (maxpen == 0/*AUTOWALL_PEN_TO_MINDMG*/) // ???
+			if (maxpen == 0/*AUTOWALL_PEN_TO_MINDMG*//*) // ???
 			{
 				iPenetration = *((int*)wpndata + 432);
 			}
@@ -224,9 +389,9 @@ namespace rage
 				Vector vecEnd = source + vecDirShooting * flDistance;
 				trace_t tr;
 
-				UTIL_TraceLineIgnoreTwoEntities(source, vecEnd, 1174421515, pThis, lastPlayerHit, 0 /*COLLISION_GROUP_NONE*/, &tr);
+				UTIL_TraceLineIgnoreTwoEntities(source, vecEnd, 1174421515, pThis, lastPlayerHit, 0 /*COLLISION_GROUP_NONE*//*, & tr);
 				{
-					CTraceFilterSkipTwoEntities filter(pThis, lastPlayerHit, 0 /*COLLISION_GROUP_NONE*/);
+					CTraceFilterSkipTwoEntities filter(pThis, lastPlayerHit, 0 /*COLLISION_GROUP_NONE*//*);
 					UTIL_ClipTraceToPlayers(source, vecEnd + vecDirShooting * 40.f, 1174421515, &filter, &tr);
 				}
 
@@ -322,6 +487,6 @@ namespace rage
 
 			fCurrentDamage *= shots;
 			return fCurrentDamage;
-		}
+		}*/
 	}
 }

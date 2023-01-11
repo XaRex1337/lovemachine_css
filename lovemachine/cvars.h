@@ -86,8 +86,8 @@ public:
 	void setup()
 	{
 		//all_cvars.push_back({ "fov", "main field of view", 90.f, 0.f, 179.f, cvar_float });
-		all_cvars.push_back({ "vm_fov", "viewmodel fov", 68.f, 0.f, 179.f, cvar_float });
-		all_cvars.push_back({ "kb_range", "knifebot distance to work", 43.f, 32.f, 68.f, cvar_float }); // 48
+		all_cvars.push_back({ "vm_fov", "viewmodel fov", 90.f, 0.f, 179.f, cvar_float });
+		all_cvars.push_back({ "kb_range", "knifebot distance to work", 55.f, 32.f, 68.f, cvar_float }); // 48
 
 		//all_cvars.push_back({ "ap_percent", "percent of ap firing", 35.f, 0.f, 100.f, cvar_int });
 		//all_cvars.push_back({ "chams_t_r", "color for terr. chams", 150.f, 0.f, 255.f, cvar_int });
@@ -96,7 +96,7 @@ public:
 		//all_cvars.push_back({ "chams_ct_r", "color for swat chams", 50.f, 0.f, 255.f, cvar_int });
 		//all_cvars.push_back({ "chams_ct_g", "color for swat chams", 255.f, 0.f, 255.f, cvar_int }); // 90
 		//all_cvars.push_back({ "chams_ct_b", "color for swat chams", 150.f, 0.f, 255.f, cvar_int });
-		all_cvars.push_back({ "nightmode", "percent of wall darkness", 0.f, 0.f, 100.f, cvar_int });
+		all_cvars.push_back({ "nightmode", "percent of wall darkness", 100.f, 0.f, 100.f, cvar_int });
 
 		all_cvars.push_back({ "antismac", "smac proof functions", false, 0, 1, cvar_bool });
 		all_cvars.push_back({ "ragemode", "rage functions", false, 0, 1, cvar_bool });

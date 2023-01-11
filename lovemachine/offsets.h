@@ -34,6 +34,8 @@ namespace offsets
 	dword move_type = 0x178;
 	dword have_defuser;
 	//dword c4_defuse;
+	dword usp_silencer;
+	dword m4a1_silencer;
 
 	// TODO : переработать cout в console::write
 	const char* initialize_tables()
@@ -175,5 +177,7 @@ namespace offsets
 		//coord_frame = get_offset("DT_CSPlayer", "m_fFlags") - sizeof(Vector) - sizeof(Vector) - sizeof(matrix3x4_t);
 		have_defuser = angles + sizeof(qangle);//get_offset("CCSPlayer", "m_bHasDefuser");
 		//c4_defuse = get_offset("DT_PlantedC4", "m_flDefuseCountDown");
+		usp_silencer = get_offset("DT_WeaponUSP", "m_bSilencerOn");
+		m4a1_silencer = get_offset("DT_WeaponM4A1", "m_bSilencerOn");
 	}
 }

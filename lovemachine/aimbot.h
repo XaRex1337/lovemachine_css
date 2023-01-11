@@ -1,6 +1,7 @@
 #pragma once
 #include "legit_misc.h"
 #include "backtrack.h"
+#include "autowall.h"
 
 namespace legit
 {
@@ -51,7 +52,7 @@ namespace legit
 				send_mouse(0, 0, MOUSEEVENTF_LEFTUP);
 		}
 
-		void check_backtrack(int player_id, bool check_visibility, float* fov, int* bone_id, int* tick, centity* entity, qangle* angle, short* best_priority, cvector* point)
+		void check_backtrack(int player_id, bool check_visibility, bool check_penetration, float* fov, int* bone_id, int* tick, centity* entity, qangle* angle, short* best_priority, cvector* point)
 		{
 			if (sets->legit.backtrack.enabled && !points.empty() && !cvar(antismac).value)
 			{
@@ -64,7 +65,7 @@ namespace legit
 					float p_fov = -1.f;
 					int p_bone = -1;
 					qangle p_angle(0.f, 0.f, 0.f);
-					auto p_point = record->get_point(check_visibility, entity, &p_fov, &p_bone, &p_angle);
+					auto p_point = record->get_point(check_visibility, check_penetration, entity, &p_fov, &p_bone, &p_angle);
 					auto priority = get_priority(p_bone);
 					if (priority > *best_priority)
 					{
@@ -81,22 +82,41 @@ namespace legit
 			}
 		}
 
-		cvector get_point(int player_id, bool check_visibility, vector<int> check_points, centity* entity, float* fov, int* bone_id, int* tick, matrix3x4_t hitbox_matrix[128], qangle* angle = nullptr)
+		cvector get_point(int player_id, bool check_visibility, bool check_penetration, vector<int> check_points, centity* entity, float* fov, int* bone_id, int* tick, matrix3x4_t hitbox_matrix[128], qangle* angle = nullptr)
 		{
 			cvector point(0.f, 0.f, 0.f);
 			const auto viewangle = global::cmd->viewangles + global::local->get_punch() * 2.f;
 			const auto eye_pos = global::local->get_eye_pos();
 
-			if (check_points.size() == 1 /*&& (!check_visibility || entity->hitbox_visible(check_points.at(0), hitbox_matrix))*/)
+			if (check_points.size() == 1)
 			{
 				point = entity->get_hitbox(check_points.at(0), hitbox_matrix, global::curtime);
-				if (check_visibility && !is_visible(entity, point)/*entity->visible(point)*/)
+				if (point.IsZero())
 				{
 					point = cvector(0.f, 0.f, 0.f);
 					if (cvar(ragemode).value)
 					{
 						short best_priority = -1;
-						check_backtrack(player_id, check_visibility, fov, bone_id, tick, entity, angle, &best_priority, &point);
+						check_backtrack(player_id, check_visibility, check_penetration, fov, bone_id, tick, entity, angle, &best_priority, &point);
+					}
+					return point;
+				}
+
+				bool visible = is_visible(entity, point);
+				bool penetrable = false;
+				if (check_penetration && !visible)
+				{
+					weaponinfo_t w;
+					get_weapon_info(global::weapon->get_weaponid(), global::weapon->is_silenced(), w);
+					penetrable = rage::autowall::is_penetrable(w, eye_pos, point);
+				}
+				if ((check_visibility && !visible) && !penetrable)
+				{
+					point = cvector(0.f, 0.f, 0.f);
+					if (cvar(ragemode).value)
+					{
+						short best_priority = -1;
+						check_backtrack(player_id, check_visibility, check_penetration, fov, bone_id, tick, entity, angle, &best_priority, &point);
 					}
 					return point;
 				}
@@ -107,25 +127,29 @@ namespace legit
 				if (cvar(ragemode).value)
 				{
 					short best_priority = get_priority(*bone_id);
-					check_backtrack(player_id, check_visibility, fov, bone_id, tick, entity, angle, &best_priority, &point);
+					check_backtrack(player_id, check_visibility, check_penetration, fov, bone_id, tick, entity, angle, &best_priority, &point);
 				}
 			}
 			else if (cvar(ragemode).value)
 			{
 				short best_priority = -1;
-				check_backtrack(player_id, check_visibility, fov, bone_id, tick, entity, angle, &best_priority, &point);
-
-				if (best_priority == 5)
-				{
-					return point;
-				}
 
 				for (auto id : check_points)
 				{
 					auto p_point = entity->get_hitbox(id, hitbox_matrix, global::curtime);
 					if (p_point.IsZero()) continue;
 
-					if (check_visibility && !is_visible(entity, p_point)/*entity->visible(p_point)*/) continue;
+					bool visible = is_visible(entity, p_point);
+					bool penetrable = false;
+					if (check_penetration && !visible)
+					{
+						weaponinfo_t w;
+						get_weapon_info(global::weapon->get_weaponid(), global::weapon->is_silenced(), w);
+						penetrable = rage::autowall::is_penetrable(w, eye_pos, p_point);
+					}
+					
+					if ((check_visibility && !visible) &&
+						!penetrable/*entity->visible(p_point)*/) continue;
 
 					auto calced = calc_angle(eye_pos, p_point);
 					auto p_fov = get_fov(viewangle, calced);
@@ -142,8 +166,9 @@ namespace legit
 
 						best_priority = priority;
 					}
-					break;
 				}
+
+				check_backtrack(player_id, check_visibility, check_penetration, fov, bone_id, tick, entity, angle, &best_priority, &point);
 			}
 			else
 			{
@@ -229,9 +254,10 @@ namespace legit
 				return;
 
 			float fov = 180.f;
+			float dist = 9999.f;
 			int bone_id = -1;
 			int tick = -1;
-			auto point = get_point(id, true, points, entity, &fov, &bone_id, &tick, hitbox_matrix);
+			auto point = get_point(id, true, cvar(ragemode).value && sets->rage.autowall, points, entity, &fov, &bone_id, &tick, hitbox_matrix);
 
 			if (point.IsZero() || bone_id == -1) return;
 
@@ -247,9 +273,9 @@ namespace legit
 				best_fov = fov;
 				best_id = id;
 			}
-			else if (cvar(ragemode).value && (fov = (point - global::local->get_origin()).Length()) <= best_fov)
+			else if (cvar(ragemode).value && fov <= sets->legit.aim.fov && (dist = (point - global::local->get_origin()).Length()) <= best_fov)
 			{
-				best_fov = fov;
+				best_fov = dist;
 				best_id = id;
 			}
 		}
@@ -264,7 +290,7 @@ namespace legit
 			// TODO : сделай фикс лучше, чем viewangles.x < -87.f || viewangles.x > 87.f
 			// P.S. : использовать trace_forward для проверки на врага под прицелом
 			// P.P.S: причина - начинает неестественно вертеться
-			if (sets->legit.aim.fov <= 0.f || points.empty() || !should_aim() || global::cmd->viewangles.x < -87.f || global::cmd->viewangles.x > 87.f) return;
+			if (sets->legit.aim.fov <= 0.f || points.empty() || !should_aim() || (!cvar(ragemode).value && (global::cmd->viewangles.x < -87.f || global::cmd->viewangles.x > 87.f))) return;
 
 			global::weapon->update_acc_penalty();
 
@@ -288,7 +314,7 @@ namespace legit
 			//auto point = visible ? 
 			//			 entity->get_hitbox(best_bone, hitbox_matrix, global::curtime) :
 			//			 get_point(entity, &fov, &best_bone, hitbox_matrix, &angle);
-			auto point = get_point(best_id, true, points, entity, &fov, &bone_id, &tick, hitbox_matrix, &angle);
+			auto point = get_point(best_id, true, cvar(ragemode).value && sets->rage.autowall, points, entity, &fov, &bone_id, &tick, hitbox_matrix, &angle);
 			//if (point.IsZero() || bone_id == -1) return;
 
 			//if (visible) angle = calc_angle(global::local->get_eye_pos(), point);

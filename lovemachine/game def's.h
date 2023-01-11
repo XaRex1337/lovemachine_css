@@ -56,7 +56,7 @@ enum e_weapon
 	weapon_glock,
 	weapon_scout,
 	weapon_he_grenade,
-	weapon_xm014,
+	weapon_xm1014,
 	weapon_c4,
 	weapon_mac10,
 	weapon_aug,
