@@ -883,7 +883,7 @@ namespace hooks
 			}
 		}
 
-		o_emit_sound(filter, entity_index, channel, sample, sets->visuals.esp_check[1] ? 5.f : volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
+		o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
 	}
 
 	memory::vthook* event_manager;
