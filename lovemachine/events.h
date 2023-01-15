@@ -4,7 +4,6 @@
 #include "game shit.h"
 #include "settings.h"
 #include "draw.h"
-#include "esp.h"
 
 namespace events
 {
@@ -199,7 +198,7 @@ namespace events
 			hitmarker::killstreak2 = hitmarker::timer = hitmarker::kill_timer = bomb_timer::defuse_time = bomb_timer::explosion_time = legit::aimbot::kill_delay = 0.f;
 			bomb_timer::planted = false;
 			misc::draw::clear(false);
-			//esp::sounds.clear(); // TODO: пофиксить, не компилится
+			server::sounds.clear();
 			//ZeroMemory(legit::backtrack::records, sizeof(legit::backtrack::records));
 			//ZeroMemory(server::players, sizeof(server::players));
 		}

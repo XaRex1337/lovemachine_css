@@ -39,6 +39,15 @@ namespace server
 	int max_players = 0;
 	//int max_entity = 0;
 
+	struct sound
+	{
+		cvector position;
+		float time;
+		color col;
+	};
+
+	deque<sound> sounds;
+
 	struct
 	{
 		int type = 0;

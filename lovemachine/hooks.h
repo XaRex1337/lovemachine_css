@@ -865,7 +865,7 @@ namespace hooks
 		if ((sets->visuals.esp_show[4] || sets->visuals.esp_show[5]) && entity_index >= 0 && entity_index < 64 && entity_index != global::local_id)// && strstr(sample, "footstep"))
 		{
 			auto player = _ent_list->get_centity(entity_index);
-			if (!sets->visuals.esp_filter[0] || !sets->visuals.friends && player->get_team() == global::local->get_team())
+			if (!sets->visuals.esp_filter[0] || !player || !player->valid() || (!sets->visuals.friends && player->get_team() == global::local->get_team()))
 			{
 				o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
 				return;
@@ -874,12 +874,12 @@ namespace hooks
 			if (sets->visuals.esp_show[4] && strstr(sample, "footstep"))
 			{
 				//console::write(to_str(entity_index) + " " + sample);
-				esp::sounds.push_back({ *origin, global::curtime, color(255, 100, 0) });
+				server::sounds.push_back({ *origin, global::curtime, color(255, 100, 0) });
 			}
-			else if (sets->visuals.esp_show[5] && sample[0] == ')' && sample[1] == 'w' && sample[2] == 'e') // shot
+			else if (sets->visuals.esp_show[5] && sample[0] == ')' && sample[1] == 'w' && sample[2] == 'e' && player->is_dormant()) // shot
 			{
 				//console::write(to_str(entity_index) + " " + sample);
-				esp::sounds.push_back({ player->get_abs_origin(), global::curtime, color(255, 0, 0)});
+				server::sounds.push_back({ player->get_abs_origin(), global::curtime, color(255, 0, 0)});
 			}
 		}
 

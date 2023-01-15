@@ -183,15 +183,6 @@ namespace esp
 		int /*id,*/ class_id, width, height, left, right, top, bottom, centerx;
 	};
 
-	struct sound
-	{
-		cvector position;
-		float time;
-		color col;
-	};
-
-	deque<sound> sounds;
-
 	void circle_3d(cvector pos, float radius, float resolution, color col)
 	{
 		// cos - x, sin - y
@@ -216,20 +207,20 @@ namespace esp
 
 	void draw_sounds()
 	{
-		if (!sounds.empty())
+		if (!server::sounds.empty())
 		{
-			for (int i = 0; i < sounds.size(); i++)
+			for (int i = 0; i < server::sounds.size(); i++)
 			{
-				if (abs(sounds.at(i).time - global::curtime) > 2.f)
+				if (abs(server::sounds.at(i).time - global::curtime) > 2.f)
 				{
-					sounds.erase(sounds.begin() + i);
+					server::sounds.erase(server::sounds.begin() + i);
 					i--;
 					continue;
 				}
 				// TODO: сделать так, чтобы линия становилась кругом, удлиняясь, а после укорачивалась и исчезала
-				circle_3d(sounds.at(i).position,
-					5.f + abs(sounds.at(i).time - global::curtime) * 5.f, 14.f,
-					sounds.at(i).col.with_alpha(255.f - abs(sounds.at(i).time - global::curtime) * 127.5f));
+				circle_3d(server::sounds.at(i).position,
+					5.f + abs(server::sounds.at(i).time - global::curtime) * 5.f, 14.f,
+					server::sounds.at(i).col.with_alpha(255.f - abs(server::sounds.at(i).time - global::curtime) * 127.5f));
 			}
 		}
 	}
