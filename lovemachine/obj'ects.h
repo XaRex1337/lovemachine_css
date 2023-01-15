@@ -33,7 +33,7 @@ namespace obj
 	const char* esp_filter[6] = { "player", "weapon", "drop_nade", "throw_nade", "bomb", "defusers" };
 	const char* esp_show[6] = { "name", "box", "weapon", "line", "steps", "shots" };
 	const char* esp_bar[2] = { "health", "armor"/*, "pl_ammo", "drop_ammo"*/ };
-	const char* esp_check[2] = { "invis"/*, "sound" */ };
+	const char* esp_check[2] = { "invis", "sound" };
 	const char* crosshair[3] = { "none", "always", "sniper only" };
 	const char* info_style[5] = { "ip", "enemies", "friends", "weapon", /*"ammo",*/ "hp" };
 	const char* ak47_skin[4] = { "default", "adidas", "bloodsport", "neon_rider" };

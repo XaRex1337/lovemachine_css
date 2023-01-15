@@ -3,7 +3,7 @@
 #include "definitions.h"
 #include "color.h"
 
-#define DEBUG_LOG
+//#define DEBUG_LOG
 
 ofstream myfile;
 
