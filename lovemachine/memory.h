@@ -53,7 +53,7 @@ namespace memory
 		typedef T* (*CreateInterfaceFn)(const char* szName, int iReturn);
 		CreateInterfaceFn CreateInterface = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA(strModule.c_str()), "CreateInterface");
 
-		std::cout << ("/iface/ " + strModule + " : ") << std::hex << (dword)CreateInterface << endl;;
+		//std::cout << ("/iface/ " + strModule + " : ") << std::hex << (dword)CreateInterface << endl;;
 
 		return CreateInterface(strInterface.c_str(), 0);
 	}

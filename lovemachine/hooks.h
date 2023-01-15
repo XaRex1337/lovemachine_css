@@ -853,17 +853,38 @@ namespace hooks
 		}
 	}
 
-	/*memory::vthook* engine_sound;
-	using emit_sound_fn = void(__stdcall*)(irecipientfilter&, int, int, const char*, float, float, int, int, const Vector*, const Vector*, void*, bool, float, int);
+	memory::vthook* engine_sound;
+	using emit_sound_fn = void(__stdcall*)(irecipientfilter&, int, int, const char*, float, float, int, int, int, const Vector*, const Vector*, void*, bool, float, int);
 	emit_sound_fn o_emit_sound;
 	void __stdcall emit_sound_hook(irecipientfilter& filter, int entity_index, int channel, const char* sample,
-		float volume, float attenuation, int flags = 0, int pitch = 100,
-		const Vector* origin = NULL, const Vector* direction = NULL, void* shit = NULL, bool update_positions = true, float soundtime = 0.0f, int speakerentity = -1)
+		float volume, float attenuation, int flags, int pitch, int special_dsp,
+		const Vector* origin, const Vector* direction, void* shit, bool update_positions, float soundtime, int speakerentity)
 	{
-		cout << "id : " << entity_index << ", channel : " << channel << ", name : " << sample << ", time : " << soundtime << endl;
+		//cout << "name : " << sample << endl;
 
-		o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, origin, direction, shit, update_positions, soundtime, speakerentity);
-	}*/
+		if ((sets->visuals.esp_show[4] || sets->visuals.esp_show[5]) && entity_index >= 0 && entity_index < 64 && entity_index != global::local_id)// && strstr(sample, "footstep"))
+		{
+			auto player = _ent_list->get_centity(entity_index);
+			if (!sets->visuals.esp_filter[0] || !sets->visuals.friends && player->get_team() == global::local->get_team())
+			{
+				o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
+				return;
+			}
+
+			if (sets->visuals.esp_show[4] && strstr(sample, "footstep"))
+			{
+				//console::write(to_str(entity_index) + " " + sample);
+				esp::sounds.push_back({ *origin, global::curtime, color(255, 100, 0) });
+			}
+			else if (sets->visuals.esp_show[5] && sample[0] == ')' && sample[1] == 'w' && sample[2] == 'e') // shot
+			{
+				//console::write(to_str(entity_index) + " " + sample);
+				esp::sounds.push_back({ player->get_abs_origin(), global::curtime, color(255, 0, 0)});
+			}
+		}
+
+		o_emit_sound(filter, entity_index, channel, sample, sets->visuals.esp_check[1] ? 5.f : volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
+	}
 
 	memory::vthook* event_manager;
 	using fire_event_clientside_fn = bool(__stdcall*)(igameevent*);
@@ -940,10 +961,10 @@ namespace hooks
 		//console::write_hex("/hook/ o_send_datagram", (dword)o_send_datagram, darkgreen);
 		//myfile << "/hook/ o_send_datagram : " << (dword)o_send_datagram << endl;
 
-		//engine_sound = new memory::vthook((dword**)_engine_sound);
-		//console::write_hex("/vthook/ engine_sound", (dword)engine_sound, darkgreen);
-		//o_emit_sound = (emit_sound_fn)engine_sound->hook_function((dword)emit_sound_hook, 4);
-		//console::write_hex("/hook/ o_emit_sound", (dword)o_emit_sound, darkgreen);
+		engine_sound = new memory::vthook((dword**)_engine_sound);
+		console::write_hex("/vthook/ engine_sound", (dword)engine_sound, darkgreen);
+		o_emit_sound = (emit_sound_fn)engine_sound->hook_function((dword)emit_sound_hook, 4);
+		console::write_hex("/hook/ o_emit_sound", (dword)o_emit_sound, darkgreen);
 
 		event_manager = new memory::vthook((dword**)_event_manager);
 		console::write_hex("/vthook/ event_manager", (dword)event_manager, darkgreen);

@@ -6,9 +6,6 @@
 #include "settings.h"
 #include "surface.h"
 
-//fstream myfile;
-
-//TODO : пофиксить coord_frame (m_flpxCoordinateFrame)
 namespace esp
 {
 	struct cbox
@@ -186,6 +183,57 @@ namespace esp
 		int /*id,*/ class_id, width, height, left, right, top, bottom, centerx;
 	};
 
+	struct sound
+	{
+		cvector position;
+		float time;
+		color col;
+	};
+
+	deque<sound> sounds;
+
+	void circle_3d(cvector pos, float radius, float resolution, color col)
+	{
+		// cos - x, sin - y
+		const float j = M_PI * 2.f / resolution;
+		for (float i = 0.f; i < M_PI * 2.f; i += j)
+		{
+			float x1, y1, x2, y2;
+			sincos(i, &y1, &x1);
+			sincos(i + j, &y2, &x2);
+
+			cvector screen1, screen2;
+			if (!w2s(cvector(pos.x + x1 * radius, pos.y + y1 * radius, pos.z), screen1))
+				continue;
+
+			if (!w2s(cvector(pos.x + x2 * radius, pos.y + y2 * radius, pos.z), screen2))
+				continue;
+
+			surf::prim::line(screen1.x, screen1.y, screen2.x, screen2.y, col);
+			//surf::prim::line(screen1.x + 1, screen1.y + 1, screen2.x + 1, screen2.y + 1, col);
+		}
+	}
+
+	void draw_sounds()
+	{
+		if (!sounds.empty())
+		{
+			for (int i = 0; i < sounds.size(); i++)
+			{
+				if (abs(sounds.at(i).time - global::curtime) > 2.f)
+				{
+					sounds.erase(sounds.begin() + i);
+					i--;
+					continue;
+				}
+				// TODO: сделать так, чтобы линия становилась кругом, удлиняясь, а после укорачивалась и исчезала
+				circle_3d(sounds.at(i).position,
+					5.f + abs(sounds.at(i).time - global::curtime) * 5.f, 14.f,
+					sounds.at(i).col.with_alpha(255.f - abs(sounds.at(i).time - global::curtime) * 127.5f));
+			}
+		}
+	}
+
 	template<typename t>
 	void bar(bool vertical, bool text_on_left, int left, int top, int right, int bottom, float value, float vmax, color front, color back, const char* output = "%i")
 	{
@@ -217,6 +265,7 @@ namespace esp
 
 		return base;
 	}
+
 	//float oldx, oldy, dx, dy, lastx, lasty;
 	// очень лагает w2s, есп не будет пока w2s не примет христиуанство вновь
 	// все таки приняло, за работу
@@ -224,6 +273,9 @@ namespace esp
 	{
 		if (!sets->visuals.bomb_timer && !sets->visuals.esp_filter[0] && !sets->visuals.esp_filter[1] && !sets->visuals.esp_filter[2] && !sets->visuals.esp_filter[3] && !sets->visuals.esp_filter[4] && !sets->visuals.esp_filter[5])
 			return;
+
+		if (sets->visuals.esp_filter[0] && sets->visuals.esp_show[4])
+			draw_sounds();
 
 		centity* entity;
 		iclientnetworkable* networkable;
@@ -237,11 +289,9 @@ namespace esp
 		static short alpha[64];
 		cvector screen;
 
-		//surf::font::draw(surf::font::hitmarker_big, 100, 100, color(100, 200, 150), null, to_str(server::local.type).c_str());
-
 		for (int id = 0; id < _ent_list->get_highest_entity_index(); id++)
 		{
-			if (id == global::local_id) continue;
+			if (id == global::local_id) continue;			
 
 			entity = _ent_list->get_centity(id);
 			if (!entity || entity->get_origin().IsZero() || entity == global::local_observed) continue;

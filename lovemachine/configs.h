@@ -91,7 +91,8 @@ namespace configs
 		bools.push_back(an_var<bool>(&sets->legit.trigger.hitbox[4], "legit.trigger", "hitbox_legs"));
 		floats.push_back(an_var<float>(&sets->legit.trigger.delay, "legit.trigger", "delay"));
 
-		bools.push_back(an_var<bool>(&sets->rage.autoscope, "rage.other", "autoscope"));
+		//bools.push_back(an_var<bool>(&sets->rage.autoscope, "rage.other", "autoscope"));
+		bools.push_back(an_var<bool>(&sets->rage.autowall, "rage.other", "autowall"));
 		bools.push_back(an_var<bool>(&sets->rage.autoshoot, "rage.other", "autoshoot"));
 		bools.push_back(an_var<bool>(&sets->rage.autostop, "rage.other", "autostop"));
 		bools.push_back(an_var<bool>(&sets->rage.silent, "rage.other", "silent"));
@@ -130,12 +131,15 @@ namespace configs
 		bools.push_back(an_var<bool>(&sets->visuals.esp_show[1], "visuals.esp", "box"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_show[2], "visuals.esp", "player_weapon"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_show[3], "visuals.esp", "lines"));
+		bools.push_back(an_var<bool>(&sets->visuals.esp_show[4], "visuals.esp", "steps"));
+		bools.push_back(an_var<bool>(&sets->visuals.esp_show[5], "visuals.esp", "shots"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_bar[0], "visuals.esp", "healthbar"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_bar[1], "visuals.esp", "armorbar"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_bar[2], "visuals.esp", "player_ammobar"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_bar[3], "visuals.esp", "weapon_ammobar"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_check[0], "visuals.esp", "invisible"));
 		bools.push_back(an_var<bool>(&sets->visuals.esp_check[1], "visuals.esp", "on_sound"));
+		bools.push_back(an_var<bool>(&sets->visuals.defuser_only_if_need, "visuals.esp", "defuser_only_if_need"));
 		ints.push_back(an_var<int>(&sets->visuals.esp_t.r, "visuals.esp", "esp_t.r"));
 		ints.push_back(an_var<int>(&sets->visuals.esp_t.g, "visuals.esp", "esp_t.g"));
 		ints.push_back(an_var<int>(&sets->visuals.esp_t.b, "visuals.esp", "esp_t.b"));
@@ -143,7 +147,6 @@ namespace configs
 		ints.push_back(an_var<int>(&sets->visuals.esp_ct.g, "visuals.esp", "esp_ct.g"));
 		ints.push_back(an_var<int>(&sets->visuals.esp_ct.b, "visuals.esp", "esp_ct.b"));
 		bools.push_back(an_var<bool>(&sets->visuals.fade, "visuals.esp", "fade"));
-		bools.push_back(an_var<bool>(&sets->visuals.defuser_only_if_need, "visuals.esp", "defuser_only_if_need"));
 		//bools.push_back(an_var<bool>(&sets->visuals.fancy_w2s, "visuals.esp", "fancy_w2s"));
 
 		//TODO : info_style
@@ -177,8 +180,8 @@ namespace configs
 
 		cvars.setup();
 
-		//for (auto cvar : cvars.all_cvars)
-		//	floats.push_back(an_var<float>(&cvar.value, "console_variables", cvar.name));
+		for (auto cvar : cvars.all_cvars)
+			floats.push_back(an_var<float>(&cvar.value, "console_variables", cvar.name));
 	}
 
 	bool write(string file)

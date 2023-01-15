@@ -128,7 +128,7 @@ namespace menu
 					}
 					else
 					{
-						obj::slider<float>(obj::legit, "hitchance", sets->rage.hitchance, 0.f, 1.f, "%f");
+						obj::slider<float>(obj::legit, "hitchance", sets->rage.hitchance, 0.f, 1.f, "%.2f");
 					}
 					aim_bone.on_draw();
 

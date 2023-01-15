@@ -30,6 +30,8 @@ public:
 	}
 };
 
+
+
 class isurface
 {
 public:
@@ -55,6 +57,12 @@ public:
 	{
 		typedef void(__thiscall* line_fn)(void*, int, int, int, int);
 		vfunc< line_fn >(this, 15)(this, x0, y0, x1, y1);
+	}
+
+	void polyline(int* px, int* py, int num)
+	{
+		typedef void(__thiscall* polyline_fn)(void*, int*, int*, int);
+		vfunc< polyline_fn >(this, 16)(this, px, py, num);
 	}
 
 	void set_font(unsigned long font)
@@ -743,11 +751,11 @@ class ienginesound
 {
 public:
 	void emit_sound(irecipientfilter& filter, int iEntIndex, int iChannel, const char* pSample,
-		float flVolume, float flAttenuation, int iFlags = 0, int iPitch = 100/*PITCH_NORM*/,
+		float flVolume, float flAttenuation, int iFlags = 0, int iPitch = 100/*PITCH_NORM*/, int iSpecialDSP = 0,
 		const Vector* pOrigin = NULL, const Vector* pDirection = NULL, void* pUtlVecOrigins = NULL, bool bUpdatePositions = true, float soundtime = 0.0f, int speakerentity = -1)
 	{
-		typedef void(__thiscall* emit_sound_fn)(void*, irecipientfilter&, int, int, const char*, float, float, int, int, const Vector*, const Vector*, void*, bool, float, int);
-		vfunc< emit_sound_fn >(this, 5)(this, filter, iEntIndex, iChannel, pSample, flVolume, flAttenuation, iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity);
+		typedef void(__thiscall* emit_sound_fn)(void*, irecipientfilter&, int, int, const char*, float, float, int, int, int, const Vector*, const Vector*, void*, bool, float, int);
+		vfunc< emit_sound_fn >(this, 4)(this, filter, iEntIndex, iChannel, pSample, flVolume, flAttenuation, iFlags, iPitch, iSpecialDSP, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity);
 	}
 };
 

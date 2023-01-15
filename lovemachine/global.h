@@ -2,6 +2,7 @@
 #include "includes.h"
 #include "definitions.h"
 #include "game def's.h"
+#include "color.h"
 
 class cusercmd;
 class centity;
@@ -43,20 +44,20 @@ namespace server
 		int type = 0;
 	} local;
 
-	/*struct
+	struct
 	{
 		//int health = 0;
 		//int type = 0;
-		int clip = 0;
+		//int clip = 0;
 		//int team = 0;
 		//int lifestate = 0;
-		string weapon = "";
+		//string weapon = "";
 		//string name = "";
 		//centity* spec_player = nullptr;
 		//float drawable_timer = 0.f;
 		//bool drawable = false;
-		bool valid = false;
-	} players[64];//, local;*/
+		//bool valid = false;
+	} players[64];//, local;
 
 	/*struct
 	{

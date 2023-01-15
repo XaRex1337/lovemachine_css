@@ -40,8 +40,8 @@ void vectorangles(const cvector& forward, qangle& angles)
 
 void sincos(float radians, float* sine, float* cosine)
 {
-	*sine = sin(radians);
-	*cosine = cos(radians);
+	*sine = sinf(radians);
+	*cosine = cosf(radians);
 }
 
 void anglevectors(const qangle& angles, cvector* forward)

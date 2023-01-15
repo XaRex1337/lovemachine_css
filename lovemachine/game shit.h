@@ -21,7 +21,7 @@ namespace game
 		ivrenderview* render_view;
 		iplayerinfomanager* pl_info_manager;
 		ienginetrace* engine_trace;
-		//ienginesound* engine_sound;
+		ienginesound* engine_sound;
 		igameeventmanager* event_manager;
 		icvar* cvar;
 		cglobalvars* globals;
@@ -71,8 +71,8 @@ namespace game
 			cvar = memory::pinterface<icvar>("vstdlib.dll", "VEngineCvar004");
 			console::write_hex("/interface/ cvar", (dword)cvar, darkgreen);
 
-			//engine_sound = memory::pinterface<ienginesound>("engine.dll", "IEngineSoundClient003");
-			//console::write_hex("/interface/ engine_sound", (dword)engine_sound, darkgreen);
+			engine_sound = memory::pinterface<ienginesound>("engine.dll", "IEngineSoundClient003");
+			console::write_hex("/interface/ engine_sound", (dword)engine_sound, darkgreen);
 
 			event_manager = memory::pinterface<igameeventmanager>("engine.dll", "GAMEEVENTSMANAGER002");
 			console::write_hex("/interface/ event_manager", (dword)event_manager, darkgreen);

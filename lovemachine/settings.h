@@ -114,7 +114,7 @@ public:
 		color chams_ct = color(50, 255, 150);
 		int crosshair = 2;
 		bool esp_filter[6] = { false, false, false, false, false, false };
-		bool esp_show[4] = { false, false, false, false };
+		bool esp_show[6] = { false, false, false, false, false, false };
 		bool esp_bar[4] = { false, false, false, false };
 		bool esp_check[2] = { false, false };
 		color esp_t = color(210, 35, 16);

@@ -95,5 +95,11 @@ namespace surf
 			_surface->set_color(p_color.r, p_color.g, p_color.b, p_color.a);
 			_surface->line(x, y, x1, y1);
 		}
+
+		void polyline(int* px, int* py, int num, color p_color)
+		{
+			_surface->set_color(p_color.r, p_color.g, p_color.b, p_color.a);
+			_surface->polyline(px, py, num);
+		}
 	}
 }
