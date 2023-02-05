@@ -14,9 +14,10 @@ the people whose functions i used and who helped me are marked in the code "(c) 
 * [showcase](https://www.youtube.com/watch?v=7ej6-iTziOM)
 * [uc thread](https://www.unknowncheats.me/forum/counterstrike-source/565015-lovemachine-css-steam.html)
 * [yougame thread](https://yougame.biz/threads/278694/)
-* [source with comments](https://yadi.sk/d/s-yRP6K6Z7B8GA)
+* [zelenka.guru (lolz) thread](https://zelenka.guru/threads/4851752/)
 
 # some cool features
+* sound (step, shot) 3d circles
 * aimbot through mouse for SMAC (for rage too, but needs a little rework (like cvars))
 * legit backtrack (needs a little rework to get more than 10 ticks adequately) with bt chams/dots
 * knifebot with legit backtrack for knife
