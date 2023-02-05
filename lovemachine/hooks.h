@@ -53,10 +53,10 @@ namespace hooks
 			global::key[VK_MBUTTON] = false;
 			break;
 		case WM_XBUTTONDOWN:
-			global::key[VK_XBUTTON1 + (GET_XBUTTON_WPARAM(w_param) - 1)] = true; // GET_XBUTTON_WPARAM = какая по значению кнопка(боковая)
+			global::key[VK_XBUTTON1 + (GET_XBUTTON_WPARAM(w_param) - 1)] = true; // GET_XBUTTON_WPARAM = ГЄГ ГЄГ Гї ГЇГ® Г§Г­Г Г·ГҐГ­ГЁГѕ ГЄГ­Г®ГЇГЄГ (ГЎГ®ГЄГ®ГўГ Гї)
 			break;
 		case WM_XBUTTONUP:
-			global::key[VK_XBUTTON1 + (GET_XBUTTON_WPARAM(w_param) - 1)] = false; // GET_XBUTTON_WPARAM = какая по значению кнопка(боковая)
+			global::key[VK_XBUTTON1 + (GET_XBUTTON_WPARAM(w_param) - 1)] = false; // GET_XBUTTON_WPARAM = ГЄГ ГЄГ Гї ГЇГ® Г§Г­Г Г·ГҐГ­ГЁГѕ ГЄГ­Г®ГЇГЄГ (ГЎГ®ГЄГ®ГўГ Гї)
 			break;
 		case WM_KEYDOWN:
 			global::key[w_param] = true;
@@ -124,7 +124,7 @@ namespace hooks
 			once = false;
 		}
 
-		d3d9->rehook(); // зачем?
+		d3d9->rehook(); // Г§Г Г·ГҐГ¬?
 
 		if (sets->menu.panic)
 		{
@@ -153,7 +153,7 @@ namespace hooks
 			global::map_changed = true;
 		}
 
-		//TODO : усовершенствовать
+		//TODO : ГіГ±Г®ГўГҐГ°ГёГҐГ­Г±ГІГўГ®ГўГ ГІГј
 		for (int key_id = 0; key_id < 0xFE + 1; key_id++)
 		{
 			if (key[key_id] != global::key[key_id])
@@ -427,7 +427,7 @@ namespace hooks
 			}
 		}*/
 
-		// я пытался, но ничего не вышло
+		// Гї ГЇГ»ГІГ Г«Г±Гї, Г­Г® Г­ГЁГ·ГҐГЈГ® Г­ГҐ ГўГ»ГёГ«Г®
 		/*static unsigned int correct_vgui = NULL;
 		if (correct_vgui == NULL)
 		{
@@ -458,7 +458,7 @@ namespace hooks
 	}
 
 	// thx catalinadragan22 (c) // uc
-	// TODO: изучить подробнее
+	// TODO: ГЁГ§ГіГ·ГЁГІГј ГЇГ®Г¤Г°Г®ГЎГ­ГҐГҐ
 	memory::vthook* netchannel;
 	using send_datagram_fn = int(__thiscall*)(CNetChan*, /*void*,*/ void*);
 	send_datagram_fn o_send_datagram;
@@ -496,7 +496,7 @@ namespace hooks
 			return;
 		}
 
-		//вызывает ошибку из-за слишком частых запросов
+		//ГўГ»Г§Г»ГўГ ГҐГІ Г®ГёГЁГЎГЄГі ГЁГ§-Г§Г  Г±Г«ГЁГёГЄГ®Г¬ Г·Г Г±ГІГ»Гµ Г§Г ГЇГ°Г®Г±Г®Гў
 		//cusercmd* cmd = _input->get_usercmd(sequence_number);
 
 		/*if (global::cmd && global::cmd->command_number != 0)
@@ -525,7 +525,7 @@ namespace hooks
 				netchannel = null;
 				o_send_datagram = null;
 			}
-			// TODO: ОБНОВИТЬ И ВЕРНУТЬ
+			// TODO: ГЋГЃГЌГЋГ‚Г€Г’Гњ Г€ Г‚Г…ГђГЌГ“Г’Гњ
 			/*else if (_clientstate && _clientstate->m_NetChannel && !netchannel)
 			{
 				console::write_hex("netchannel", (dword)_clientstate->m_NetChannel, darkgreen);
@@ -535,7 +535,7 @@ namespace hooks
 				console::write_hex("/hook/ o_send_datagram", (dword)o_send_datagram, darkgreen);
 			}*/
 
-			// TODO: изучить подробнее
+			// TODO: ГЁГ§ГіГ·ГЁГІГј ГЇГ®Г¤Г°Г®ГЎГ­ГҐГҐ
 			/*if (_clientstate)
 			{
 				if (_clientstate->m_NetChannel && global::map_changed)
@@ -580,7 +580,7 @@ namespace hooks
 			//css fix for head triggering (bbox_maxs z component is too small)
 			//credits: me, wav
 			// (c) iwebz kolo
-			// TODO: не работает, ломается виз чек, скорее всего - что-то устарело
+			// TODO: Г­ГҐ Г°Г ГЎГ®ГІГ ГҐГІ, Г«Г®Г¬Г ГҐГІГ±Гї ГўГЁГ§ Г·ГҐГЄ, Г±ГЄГ®Г°ГҐГҐ ГўГ±ГҐГЈГ® - Г·ГІГ®-ГІГ® ГіГ±ГІГ Г°ГҐГ«Г®
 			/*for (INT ax = 1; ax <= _engine->get_max_clients(); ax++)
 			{
 				centity* pBaseEntity = _ent_list->get_centity(ax);
@@ -810,7 +810,7 @@ namespace hooks
 	memory::vthook* clientmode;
 	/*using override_view_fn = void(__stdcall*)(cviewsetup* p_setup);
 	override_view_fn o_override_view;
-	void __stdcall override_view_hook(cviewsetup* p_setup) // почему-то не работает, пробовал все
+	void __stdcall override_view_hook(cviewsetup* p_setup) // ГЇГ®Г·ГҐГ¬Гі-ГІГ® Г­ГҐ Г°Г ГЎГ®ГІГ ГҐГІ, ГЇГ°Г®ГЎГ®ГўГ Г« ГўГ±ГҐ
 	{
 		cout << p_setup->fov << ", " << p_setup->fovViewmodel << endl;
 
@@ -883,7 +883,7 @@ namespace hooks
 			}
 		}
 
-		o_emit_sound(filter, entity_index, channel, sample, sets->visuals.esp_check[1] ? 5.f : volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
+		o_emit_sound(filter, entity_index, channel, sample, volume, attenuation, flags, pitch, special_dsp, origin, direction, shit, update_positions, soundtime, speakerentity);
 	}
 
 	memory::vthook* event_manager;
@@ -897,7 +897,7 @@ namespace hooks
 	}
 
 	void do_them()
-	{// старый		long -> wndproc			  наш wndproc	   окно cs:go	задать новый адрес					    новый адрес
+	{// Г±ГІГ Г°Г»Г©		long -> wndproc			  Г­Г Гё wndproc	   Г®ГЄГ­Г® cs:go	Г§Г Г¤Г ГІГј Г­Г®ГўГ»Г© Г Г¤Г°ГҐГ±					    Г­Г®ГўГ»Г© Г Г¤Г°ГҐГ±
 		o_wndproc = reinterpret_cast<wndproc>(SetWindowLongPtr(global::window, GWLP_WNDPROC, reinterpret_cast<long>(wndproc_hook)));
 		console::write_hex("/hook/ o_wndproc", (dword)o_wndproc, darkgreen);
 
@@ -930,7 +930,7 @@ namespace hooks
 
 		o_create_move = (create_move_fn)client->hook_function((dword)create_move_hook, 21);
 		console::write_hex("/hook/ o_create_move", (dword)o_create_move, darkgreen);
-		// fsn рабочий
+		// fsn Г°Г ГЎГ®Г·ГЁГ©
 		//o_frame_stage_notify = (frame_stage_notify_fn)client->hook_function((dword)frame_stage_notify_hook, 35);
 		//console::write_hex("/hook/ o_frame_stage_notify", (dword)o_frame_stage_notify, darkgreen);
 		//o_write_usercmd_delta_to_buf = (write_usercmd_delta_to_buf_fn)client->hook_function((dword)write_usercmd_delta_to_buf_hook, 23);
