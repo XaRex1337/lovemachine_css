@@ -7,23 +7,6 @@
 
 namespace events
 {
-	using event_callback = void(*)(igameevent*);
-	class custom_listener : public igameeventlistener
-	{
-	public:
-		custom_listener(event_callback callback)
-		{
-			this->callback = callback;
-		}
-		
-		virtual void fire_game_event(igameevent* event)
-		{
-			callback(event);
-		}
-
-		event_callback callback;
-	};
-
 	namespace hitmarker
 	{
 		int damage_did = 0;

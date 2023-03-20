@@ -765,16 +765,6 @@ public:
 	virtual	~ibaseinterface(void) {};
 };
 
-class igameeventlistener
-{
-public:
-	virtual	~igameeventlistener(void) {};
-
-	// FireEvent is called by EventManager if event just occured
-	// KeyValue memory will be freed by manager if not needed anymore
-	virtual void fire_game_event(igameevent* event) = 0;
-};
-
 class igameeventmanager : public ibaseinterface
 {
 public:
@@ -787,13 +777,13 @@ public:
 	virtual void reset() = 0;
 
 	// adds a listener for a particular event
-	virtual bool add_listener(igameeventlistener* listener, const char* name, bool bServerSide) = 0;
+	virtual bool add_listener(void* listener, const char* name, bool bServerSide) = 0;
 
 	// returns true if this listener is listens to given event
-	virtual bool find_listener(igameeventlistener* listener, const char* name) = 0;
+	virtual bool find_listener(void* listener, const char* name) = 0;
 
 	// removes a listener 
-	virtual void remove_listener(igameeventlistener* listener) = 0;
+	virtual void remove_listener(void* listener) = 0;
 
 	// create an event by name, but doesn't fire it. returns NULL is event is not
 	// known or no listener is registered for it. bForce forces the creation even if no listener is active
