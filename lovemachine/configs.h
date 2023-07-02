@@ -179,9 +179,9 @@ namespace configs
 		ints.push_back(an_var<int>(&sets->misc.sm_speed, "misc", "sm_speed"));
 
 		cvars.setup();
-
-		for (auto cvar : cvars.all_cvars)
-			floats.push_back(an_var<float>(&cvar.value, "console_variables", cvar.name));
+		// TODO: fix console variables saving/loading
+		//for (auto cvar : cvars.all_cvars)
+		//	floats.push_back(an_var<float>(&cvar.value, "console_variables", cvar.name));
 	}
 
 	bool write(string file)
