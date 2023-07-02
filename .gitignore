@@ -43,3 +43,50 @@
 *.db-shm
 *.db-wal
 *.opendb
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.vsidx
+*.lock
+*.db
+*.db-shm
+*.db-wal
+*.opendb
+*.ipch
+.vs/lovemachine v2/v17/.suo
+*.log
+*.iobj
+*.ipdb
+*.tlog
+*.pdb
+*.recipe
+lovemachine/Release/lovemachine.vcxproj.FileListAbsolute.txt

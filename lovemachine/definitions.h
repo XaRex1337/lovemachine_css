@@ -1,7 +1,7 @@
 #pragma once
 #include "includes.h"
 
-#define LM_VER string("v1.2")
+#define LM_VER string("v1.2.4")
 
 typedef HWND hwnd;
 typedef HMODULE hmodule;
