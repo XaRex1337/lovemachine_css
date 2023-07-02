@@ -1,5 +1,5 @@
 # lovemachine_css
-lovemachine for css (steam)
+lovemachine for css v92 (steam/nosteam)
 
 if you have any suggestions/ideas/fixes/etc you can PM me or create issue here
 * [vk/xarex_ez](https://vk.com/xarex_ez)
