@@ -1,5 +1,5 @@
 # lovemachine_css
-lovemachine for css (steam)
+lovemachine - internal cheat for css (steam, v92)
 
 if you have any suggestions/ideas/fixes/etc you can PM me or create issue here
 * [vk/xarex_ez](https://vk.com/xarex_ez)
