@@ -1,5 +1,5 @@
-# lovemachine_css
-lovemachine for css v92 (steam/nosteam)
+# lovemachine_css for css v92 (steam/nosteam)
+
 download dll & config in release
 config => c:/lovemachine/configs/
 
