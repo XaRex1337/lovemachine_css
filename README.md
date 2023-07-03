@@ -1,6 +1,7 @@
 # lovemachine_css
 lovemachine for css v92 (steam/nosteam)
 download dll & config in release
+config => c:/lovemachine/configs/
 
 if you have any suggestions/ideas/fixes/etc you can PM me or create issue here
 * [vk group](https://vk.com/lovemchn.memes)
