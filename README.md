@@ -1,7 +1,10 @@
-# lovemachine_css
-lovemachine - internal cheat for css (steam, v92)
+# lovemachine_css for css v92 (steam/nosteam)
+download dll & config in release
+
+config => c:/lovemachine/configs/
 
 if you have any suggestions/ideas/fixes/etc you can PM me or create issue here
+* [vk group](https://vk.com/lovemchn.memes)
 * [vk/xarex_ez](https://vk.com/xarex_ez)
 * [unknowncheats/xarex](https://www.unknowncheats.me/forum/members/1555190.html)
 * discord xarex#0220
