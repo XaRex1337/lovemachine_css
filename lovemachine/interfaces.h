@@ -215,8 +215,8 @@ public:
 		//return vfunc< w2s_matrix_fn >(this, 36)(this); //36 - 37
 	}
 
-	bool is_screenshoting() // почему-то всегда true (скорее всего из-за того, что это нонстим)
-	{ // upd. - хз какой индекс, мб этого даже нет
+	bool is_screenshoting() // ГЇГ®Г·ГҐГ¬Гі-ГІГ® ГўГ±ГҐГЈГ¤Г  true (Г±ГЄГ®Г°ГҐГҐ ГўГ±ГҐГЈГ® ГЁГ§-Г§Г  ГІГ®ГЈГ®, Г·ГІГ® ГЅГІГ® Г­Г®Г­Г±ГІГЁГ¬)
+	{ // upd. - ГµГ§ ГЄГ ГЄГ®Г© ГЁГ­Г¤ГҐГЄГ±, Г¬ГЎ ГЅГІГ®ГЈГ® Г¤Г Г¦ГҐ Г­ГҐГІ
 		typedef bool(__thiscall* is_screenshoting_fn)(void*);
 		return vfunc< is_screenshoting_fn >(this, 77)(this); // 91 //114 - 12 = 102 //91 - 12 = 79
 	}
@@ -224,7 +224,7 @@ public:
 	void clientcmd_unrestricted(const char* szCmdString)
 	{
 		typedef void(__thiscall* clientcmd_unrestricted_fn)(void*, const char*);
-		vfunc< clientcmd_unrestricted_fn >(this, 102)(this, szCmdString);
+		vfunc< clientcmd_unrestricted_fn >(this, 106)(this, szCmdString);
 	}
 };
 
