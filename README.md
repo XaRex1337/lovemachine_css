@@ -7,7 +7,7 @@ if you have any suggestions/ideas/fixes/etc you can PM me or create issue here
 * [vk group](https://vk.com/lovemchn.memes)
 * [vk/xarex_ez](https://vk.com/xarex_ez)
 * [unknowncheats/xarex](https://www.unknowncheats.me/forum/members/1555190.html)
-* discord xarex#0220
+* discord xarex1337
 
 code is pretty messy and some features can be outdated/not complete but the most is working fine
 
